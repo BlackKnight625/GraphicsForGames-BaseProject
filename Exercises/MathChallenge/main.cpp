@@ -1,7 +1,11 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
+using namespace std;
+using namespace glm;
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+
 }
+
+
