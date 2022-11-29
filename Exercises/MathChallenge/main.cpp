@@ -98,25 +98,25 @@ int main() {
         HEADER("Exercise 3 tests")
 
         mat3 identity(1.0f);
-        cout << to_string(identity) << endl;
+        cout << "Identity matrix : " << to_string(identity) << endl;
 
         // Matrix with determinant equal to 0
         mat3 matrix0(1.0f, 2.0f, 1.0f,
                      2.0f, 3.0f, 2.0f,
                      1.0f, 2.0f, 1.0f);
-        cout << to_string(matrix0) << endl << endl;
+        cout << "Matrix with determinant equal to 0 : " << to_string(matrix0) << endl << endl;
 
         // Random matrix with positive determinant
         mat3 matrix1(4.0f, -1.0f, 1.0f,
                      4.0f, 5.0f, 3.0f,
                      -2.0f, 0.0f, 0.0f);
-        cout << to_string(matrix1) << endl << endl;
+        cout << "Random matrix with positive determinant : " + to_string(matrix1) << endl << endl;
 
         // Random matrix with negative determinant
         mat3 matrix2(1.0f, 2.0f, 3.0f,
                      2.0f, 3.0f, 2.0f,
                      3.0f, 2.0f, 1.0f);
-        cout << to_string(matrix2) << endl << endl;
+        cout << "Random matrix with negative determinant : " + to_string(matrix2) << endl << endl;
 
         try {
             cout << "Test 1" << endl;
