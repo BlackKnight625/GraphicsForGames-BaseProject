@@ -3,4 +3,6 @@ project(MathChallenge)
 
 set(CMAKE_CXX_STANDARD 14)
 
+include_directories(../../Libraries/glm)
+
 add_executable(MathChallenge main.cpp)
