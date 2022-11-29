@@ -97,30 +97,79 @@ int main() {
 
         HEADER("Exercise 3 tests")
 
-        mat3 matrix1(1.0f);
-        cout << to_string(matrix1) << endl;
-        mat3 matrix2(1.0f);
-        cout << to_string(matrix2) << endl;
+        mat3 identity(1.0f);
+        cout << to_string(identity) << endl;
 
-        mat3 matrix3(1.0f, 2.0f, 1.0f,
+        // Matrix with determinant equal to 0
+        mat3 matrix0(1.0f, 2.0f, 1.0f,
                      2.0f, 3.0f, 2.0f,
                      1.0f, 2.0f, 1.0f);
-        cout << to_string(matrix3) << endl;
-        mat3 matrix4(1.0f, 2.0f, 1.0f,
-                     2.0f, 3.0f, 2.0f,
-                     1.0f, 2.0f, 1.0f);
-        cout << to_string(matrix4) << endl;
+        cout << to_string(matrix0) << endl << endl;
 
-        HEADER("Test 1")
-        exercise3(matrix1, matrix2);
-        HEADER("Test 2")
+        // Random matrix with positive determinant
+        mat3 matrix1(4.0f, -1.0f, 1.0f,
+                     4.0f, 5.0f, 3.0f,
+                     -2.0f, 0.0f, 0.0f);
+        cout << to_string(matrix1) << endl << endl;
+
+        // Random matrix with negative determinant
+        mat3 matrix2(1.0f, 2.0f, 3.0f,
+                     2.0f, 3.0f, 2.0f,
+                     3.0f, 2.0f, 1.0f);
+        cout << to_string(matrix2) << endl << endl;
 
         try {
-            exercise3(matrix3, matrix4);
+            cout << "Test 1" << endl;
+            exercise3(identity, identity);
 
-            cout << "Should've thrown an error";
+            cout << "Success" << endl;
         } catch(char const* message) {
-            cout << "Success";
+            cout << "Shouldn't have thrown an error" << endl;
+        }
+
+        try {
+            cout << "Test 2" << endl;
+            exercise3(matrix0, identity);
+
+            cout << "Should've thrown an error" << endl;
+        } catch(char const* message) {
+            cout << "Success" << endl;
+        }
+
+        try {
+            cout << "Test 3" << endl;
+            exercise3(identity, matrix0);
+
+            cout << "Should've thrown an error" << endl;
+        } catch(char const* message) {
+            cout << "Success" << endl;
+        }
+
+        try {
+            cout << "Test 4" << endl;
+            exercise3(matrix1, identity);
+
+            cout << "Success" << endl;
+        } catch(char const* message) {
+            cout << "Should've thrown an error" << endl;
+        }
+
+        try {
+            cout << "Test 5" << endl;
+            exercise3(matrix2, identity);
+
+            cout << "Success" << endl;
+        } catch(char const* message) {
+            cout << "Should've thrown an error" << endl;
+        }
+
+        try {
+            cout << "Test 6" << endl;
+            exercise3(matrix1, matrix2);
+
+            cout << "Success" << endl;
+        } catch(char const* message) {
+            cout << "Should've thrown an error" << endl;
         }
 
     } catch (char const* message) {
