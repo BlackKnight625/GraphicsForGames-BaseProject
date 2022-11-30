@@ -69,7 +69,6 @@ void exercise3(mat3 matrix1, mat3 matrix2) {
         throw "The determinant for the second matrix can't be 0";
     }
 
-
     mat3 cal1 = inverse(matrix1 * matrix2);
     cout << "(A,B)^-1 = " << to_string(cal1) << endl;
     mat3 cal2 = inverse(matrix2) * inverse(matrix1);
@@ -104,19 +103,31 @@ int main() {
         mat3 matrix0(1.0f, 2.0f, 1.0f,
                      2.0f, 3.0f, 2.0f,
                      1.0f, 2.0f, 1.0f);
-        cout << "Matrix with determinant equal to 0 : " << to_string(matrix0) << endl << endl;
+        cout << "Matrix with determinant equal to 0: " << to_string(matrix0) << endl << endl;
 
-        // Random matrix with positive determinant
-        mat3 matrix1(4.0f, -1.0f, 1.0f,
+        // Random matrix with positive determinant 1
+        mat3 matrixp1(4.0f, -1.0f, 1.0f,
                      4.0f, 5.0f, 3.0f,
                      -2.0f, 0.0f, 0.0f);
-        cout << "Random matrix with positive determinant : " + to_string(matrix1) << endl << endl;
+        cout << "Random matrix with positive determinant 1: " + to_string(matrixp1) << endl << endl;
 
-        // Random matrix with negative determinant
-        mat3 matrix2(1.0f, 2.0f, 3.0f,
+        // Random matrix with positive determinant 2
+        mat3x3 matrixp2(4.0f, -1.0f, 1.0f,
+                       4.0f, 5.0f, 3.0f,
+                       -3.0f, 2.0f, 5.0f);
+        cout << "Random matrix with positive determinant 2: " + to_string(matrixp2) << endl << endl;
+
+        // Random matrix with negative determinant 1
+        mat3 matrixn1(1.0f, 2.0f, 3.0f,
                      2.0f, 3.0f, 2.0f,
                      3.0f, 2.0f, 1.0f);
-        cout << "Random matrix with negative determinant : " + to_string(matrix2) << endl << endl;
+        cout << "Random matrix with negative determinant 1: " + to_string(matrixn1) << endl << endl;
+
+        // Random matrix with negative determinant 2
+        mat3 matrixn2(1.0f, 2.0f, 3.0f,
+                     3.0f, 3.0f, -2.0f,
+                     3.0f, 2.0f, 1.0f);
+        cout << "Random matrix with negative determinant 2: " + to_string(matrixn2) << endl << endl;
 
         try {
             cout << "Test 1" << endl;
@@ -124,7 +135,7 @@ int main() {
 
             cout << "Success" << endl;
         } catch(char const* message) {
-            cout << "Shouldn't have thrown an error" << endl;
+            cout << "Shouldn't have thrown an error: " << message << endl;
         }
 
         try {
@@ -147,29 +158,65 @@ int main() {
 
         try {
             cout << "Test 4" << endl;
-            exercise3(matrix1, identity);
+            exercise3(matrixp1, identity);
 
             cout << "Success" << endl;
         } catch(char const* message) {
-            cout << "Should've thrown an error" << endl;
+            cout << "Shouldn't have thrown an error: " << message << endl;
         }
 
         try {
             cout << "Test 5" << endl;
-            exercise3(matrix2, identity);
+            exercise3(matrixn1, identity);
 
             cout << "Success" << endl;
         } catch(char const* message) {
-            cout << "Should've thrown an error" << endl;
+            cout << "Shouldn't have thrown an error: " << message << endl;
         }
 
         try {
             cout << "Test 6" << endl;
-            exercise3(matrix1, matrix2);
+            exercise3(matrixp1, matrixn1);
 
             cout << "Success" << endl;
         } catch(char const* message) {
-            cout << "Should've thrown an error" << endl;
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 7" << endl;
+            exercise3(matrixp1, matrixn2);
+
+            cout << "Success" << endl;
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 8" << endl;
+            exercise3(matrixp1, matrixp2);
+
+            cout << "Success" << endl;
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 9" << endl;
+            exercise3(matrixp2, matrixn1);
+
+            cout << "Success" << endl;
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 10" << endl;
+            exercise3(matrixp2, matrixn2);
+
+            cout << "Success" << endl;
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
         }
 
     } catch (char const* message) {
