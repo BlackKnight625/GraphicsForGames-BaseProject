@@ -13,6 +13,7 @@ const float THRESHOLD = (float)1.0e-5;
 using namespace std;
 using namespace glm;
 
+// Exercise 1
 mat3 createCoordinateFrame(vec3 view, vec3 up) {
 
     // Checking the arguments
@@ -28,18 +29,19 @@ mat3 createCoordinateFrame(vec3 view, vec3 up) {
     vec3 v = view / length(view);
     vec3 w = cross(up, v);
 
-    w = w / length(w);
-
     if(floatEquals(length(w), 0)) {
         // View and Up are collinear
         throw "The given View and Up vector must not be collinear";
     }
+
+    w = w / length(w);
 
     vec3 u = cross(v, w);
 
     return mat3(v, u, w);
 }
 
+// Exercise 2
 mat3 rodriguesFormula(float thetha, vec3 rotationAxis) {
 
     // Checking the arguments
@@ -61,7 +63,7 @@ mat3 rodriguesFormula(float thetha, vec3 rotationAxis) {
     return identify + (sin(thetha) * dualMatrix) + (1 - cos(thetha)) * (dualMatrix * dualMatrix);
 }
 
-
+// Exercise 3
 void exercise3(mat3 matrix1, mat3 matrix2) {
     if(floatEquals(determinant(matrix1), 0)) {
         throw "The determinant for the first matrix can't be 0";
@@ -157,6 +159,124 @@ int main() {
             }
         } catch(char const* message) {
             cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        view = vec3(-1.0f, 0, 0);
+        up = vec3(0, 0, -1.0f);
+
+        correctResult = mat3(-1.0f, 0, 0,
+                             0, 0, -1.0f,
+                             0, 1.0f, 0);
+
+        try {
+            cout << "Test 1.4: A view on the x axis, negative, and an up on the z axis, negative" << endl;
+
+            result = createCoordinateFrame(view, up);
+
+            if(floatsEquals(result, correctResult)) {
+                cout << "Success" << endl;
+            }
+            else {
+                printDifferences(correctResult, result);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        view = vec3(0, 0.1f, 0);
+        up = vec3(10.0f, 0, 0);
+
+        correctResult = mat3(0, 1.0f, 0,
+                             1.0f, 0, 0,
+                             0, 0, 1.0f);
+
+        try {
+            cout << "Test 1.5: A small view and a big up" << endl;
+
+            result = createCoordinateFrame(view, up);
+
+            if(floatsEquals(result, correctResult)) {
+                cout << "Success" << endl;
+            }
+            else {
+                printDifferences(correctResult, result);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        view = vec3(0.5f, 0.5f, 0);
+        up = vec3(0, 0.5f, 0.5f);
+
+        correctResult = mat3(0.70711f, 0.70711f, 0,
+                             -0.40825f, 0.40825f, 0.8165f,
+                             -0.57735f, 0.57735f, -0.57735f);
+
+        try {
+            cout << "Test 1.6: Diagonal view and up" << endl;
+
+            result = createCoordinateFrame(view, up);
+
+            if(floatsEquals(result, correctResult)) {
+                cout << "Success" << endl;
+            }
+            else {
+                printDifferences(correctResult, result);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        view = vec3(0.0f, 0, 0);
+        up = vec3(1.0f, 0, 0);
+
+        try {
+            cout << "Test 1.7: Passing zero-length view" << endl;
+
+            createCoordinateFrame(view, up);
+
+            cout << "Should've thrown an error" << endl;
+        } catch(char const* message) {
+            cout << "Success" << endl;
+        }
+
+        view = vec3(1.0f, 0, 0);
+        up = vec3(0.0f, 0, 0);
+
+        try {
+            cout << "Test 1.8: Passing zero-length up" << endl;
+
+            createCoordinateFrame(view, up);
+
+            cout << "Should've thrown an error" << endl;
+        } catch(char const* message) {
+            cout << "Success" << endl;
+        }
+
+        view = vec3(1.0f, 0, 0);
+        up = vec3(2.0f, 0, 0);
+
+        try {
+            cout << "Test 1.9: Passing collinear vectors" << endl;
+
+            createCoordinateFrame(view, up);
+
+            cout << "Should've thrown an error" << endl;
+        } catch(char const* message) {
+            cout << "Success" << endl;
+        }
+
+        view = vec3(1.0f, 0, 0);
+        up = vec3(-1.0f, 0, 0);
+
+        try {
+            cout << "Test 1.10: Passing collinear opposite direction vectors" << endl;
+
+            createCoordinateFrame(view, up);
+
+            cout << "Should've thrown an error" << endl;
+        } catch(char const* message) {
+            cout << "Success" << endl;
         }
 
         // Exercise 3
