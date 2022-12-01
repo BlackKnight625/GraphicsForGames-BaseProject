@@ -87,6 +87,10 @@ void printDifferences(mat3 expected, mat3 obtained) {
     cout << "Test failed. Expected: " << to_string(expected) << ", obtained: " << to_string(obtained) << endl;
 }
 
+void printDifferencesVec3(vec3 expected, vec3 obtained) {
+    cout << "Test failed. Expected: " << to_string(expected) << ", obtained: " << to_string(obtained) << endl;
+}
+
 int main() {
 
     try {
@@ -173,10 +177,9 @@ int main() {
 
             result = createCoordinateFrame(view, up);
 
-            if(floatsEquals(result, correctResult)) {
+            if (floatsEquals(result, correctResult)) {
                 cout << "Success" << endl;
-            }
-            else {
+            } else {
                 printDifferences(correctResult, result);
             }
         } catch(char const* message) {
@@ -195,10 +198,9 @@ int main() {
 
             result = createCoordinateFrame(view, up);
 
-            if(floatsEquals(result, correctResult)) {
+            if (floatsEquals(result, correctResult)) {
                 cout << "Success" << endl;
-            }
-            else {
+            } else {
                 printDifferences(correctResult, result);
             }
         } catch(char const* message) {
@@ -217,10 +219,9 @@ int main() {
 
             result = createCoordinateFrame(view, up);
 
-            if(floatsEquals(result, correctResult)) {
+            if (floatsEquals(result, correctResult)) {
                 cout << "Success" << endl;
-            }
-            else {
+            } else {
                 printDifferences(correctResult, result);
             }
         } catch(char const* message) {
@@ -279,6 +280,181 @@ int main() {
             cout << "Success" << endl;
         }
 
+        // Exercise 2
+
+        HEADER("Exercise 2 tests")
+
+        vec3 exampleX(2.0f, 0.0f, 0.0f);
+        vec3 exampleY(0.0f, 2.0f, 0.0f);
+        vec3 exampleZ(0.0f, 0.0f, 2.0f);
+
+        vec3 example0(1.0f, 1.0f, 1.0f);
+        vec3 example1(1.0f, 0.0f, 1.0f);
+        vec3 example2(0.0f, 1.0f, 1.0f);
+
+        vec3 rotationAxisX(1.0f, 0.0f, 0.0f);
+        vec3 rotationAxisY(0.0f, 1.0f, 0.0f);
+        vec3 rotationAxisZ(0.0f, 0.0f, 1.0f);
+
+        vec3 resultVec3;
+
+        try {
+            cout << "Test 2.1: A rotation axis on x, 90 degrees, to vector (2,0,0)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(90.0f), rotationAxisX);
+            resultVec3 = rotationMatrix * exampleX;
+
+            if(floatsEquals(exampleX, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(exampleX, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 2.2: A rotation axis on y, 90 degrees, to vector (0,2,0)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(90.0f), rotationAxisY);
+            resultVec3 = rotationMatrix * exampleY;
+
+            if(floatsEquals(exampleY, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(exampleY, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 2.3: A rotation axis on z, 90 degrees, to vector (0,0,2)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(90.0f), rotationAxisZ);
+            resultVec3 = rotationMatrix * exampleZ;
+
+            if(floatsEquals(exampleZ, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(exampleZ, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 2.4: A rotation axis on x, 180 degrees, to vector (0,2,0)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(180.0f), rotationAxisX);
+            resultVec3 = rotationMatrix * exampleY;
+            vec3 expectedResult(0.0f, -2.0f, 0.0f);
+
+            if(floatsEquals(expectedResult, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(expectedResult, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 2.5: A rotation axis on y, 90 degrees, to vector (0,0,2)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(90.0f), rotationAxisY);
+            resultVec3 = rotationMatrix * exampleZ;
+            vec3 expectedResult(2.0f, 0.0f, 0.0f);
+
+            if(floatsEquals(expectedResult, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(expectedResult, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 2.6: A rotation axis on z, 270 degrees, to vector (2,0,0)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(270.0f), rotationAxisZ);
+            resultVec3 = rotationMatrix * exampleX;
+            vec3 expectedResult(0.0f, -2.0f, 0.0f);
+
+            if(floatsEquals(expectedResult, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(expectedResult, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 2.7: A rotation axis on y, 45 degrees, to vector (1,1,1)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(45.0f), rotationAxisY);
+            resultVec3 = rotationMatrix * example0;
+            vec3 expectedResult(1.414214f, 1.0f, 0.0f);
+
+            if(floatsEquals(expectedResult, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(expectedResult, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 2.8: A rotation axis on vector (1,1,1), 120 degrees, to vector (2,0,0)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(120.0f), example0);
+            resultVec3 = rotationMatrix * exampleX;
+            vec3 expectedResult(0.0f, 2.0f, 0.0f);
+
+            if(floatsEquals(expectedResult, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(expectedResult, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 2.9: A rotation axis on vector (1,0,1), -180 degrees, to vector (0,0,2)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(-180.0f), example1);
+            resultVec3 = rotationMatrix * exampleZ;
+            vec3 expectedResult(2.0f, 0.0f, 0.0f);
+
+            if(floatsEquals(expectedResult, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(expectedResult, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        try {
+            cout << "Test 2.10: A rotation axis on vector (1,1,1), -120 degrees, to vector (0,1,1)" << endl;
+
+            mat3 rotationMatrix = rodriguesFormula(radians(-120.0f), example0);
+            resultVec3 = rotationMatrix * example2;
+            vec3 expectedResult(1.0f, 1.0f, 0.0f);
+
+            if(floatsEquals(expectedResult, resultVec3)) {
+                cout << "Success" << endl;
+            } else {
+                printDifferencesVec3(expectedResult, resultVec3);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
         // Exercise 3
 
         HEADER("Exercise 3 tests")
@@ -317,7 +493,7 @@ int main() {
         cout << "Random matrix with negative determinant 2: " + to_string(matrixn2) << endl << endl;
 
         try {
-            cout << "Test 1: 2 identity matrices" << endl;
+            cout << "Test 3.1: 2 identity matrices" << endl;
             exercise3(identity, identity);
 
             cout << "Success" << endl;
@@ -326,7 +502,7 @@ int main() {
         }
 
         try {
-            cout << "Test 2: 1 matrix with determinant 0 and 1 matrix with determinant equal to 0" << endl;
+            cout << "Test 3.2: 1 matrix with determinant 0 and 1 matrix with determinant equal to 0" << endl;
             exercise3(matrix0, identity);
 
             cout << "Should've thrown an error" << endl;
@@ -335,7 +511,7 @@ int main() {
         }
 
         try {
-            cout << "Test 3: 1 identity matrix and 1 matrix with determinant equal to 0" << endl;
+            cout << "Test 3.3: 1 identity matrix and 1 matrix with determinant equal to 0" << endl;
             exercise3(identity, matrix0);
 
             cout << "Should've thrown an error" << endl;
@@ -344,7 +520,7 @@ int main() {
         }
 
         try {
-            cout << "Test 4: 1 matrix with positive determinant and 1 identity matrix" << endl;
+            cout << "Test 3.4: 1 matrix with positive determinant and 1 identity matrix" << endl;
             exercise3(matrixp1, identity);
 
             cout << "Success" << endl;
@@ -353,7 +529,7 @@ int main() {
         }
 
         try {
-            cout << "Test 5: 1 matrix with negative determinant and 1 identity matrix" << endl;
+            cout << "Test 3.5: 1 matrix with negative determinant and 1 identity matrix" << endl;
             exercise3(matrixn1, identity);
 
             cout << "Success" << endl;
@@ -362,7 +538,7 @@ int main() {
         }
 
         try {
-            cout << "Test 6: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
+            cout << "Test 3.6: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
             exercise3(matrixp1, matrixn1);
 
             cout << "Success" << endl;
@@ -371,7 +547,7 @@ int main() {
         }
 
         try {
-            cout << "Test 7: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
+            cout << "Test 3.7: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
             exercise3(matrixp1, matrixn2);
 
             cout << "Success" << endl;
@@ -380,7 +556,7 @@ int main() {
         }
 
         try {
-            cout << "Test 8: 2 matrix with positive determinant" << endl;
+            cout << "Test 3.8: 2 matrix with positive determinant" << endl;
             exercise3(matrixp1, matrixp2);
 
             cout << "Success" << endl;
@@ -389,7 +565,7 @@ int main() {
         }
 
         try {
-            cout << "Test 9: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
+            cout << "Test 3.9: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
             exercise3(matrixp2, matrixn1);
 
             cout << "Success" << endl;
@@ -398,7 +574,7 @@ int main() {
         }
 
         try {
-            cout << "Test 10: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
+            cout << "Test 3.10: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
             exercise3(matrixp2, matrixn2);
 
             cout << "Success" << endl;
