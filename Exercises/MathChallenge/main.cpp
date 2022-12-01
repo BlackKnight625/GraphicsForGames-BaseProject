@@ -32,7 +32,7 @@ mat3 createCoordinateFrame(vec3 view, vec3 up) {
 
     if(floatEquals(length(w), 0)) {
         // View and Up are collinear
-        throw "The given View and Up vector must not be collienear";
+        throw "The given View and Up vector must not be collinear";
     }
 
     vec3 u = cross(v, w);
@@ -81,8 +81,8 @@ void exercise3(mat3 matrix1, mat3 matrix2) {
     assert(floatEquals(f1, f2));
 }
 
-void printDifferences(mat4 expected, mat4 obtained) {
-    cout << "Expected: " << to_string(expected) << ", obtained: " << to_string(obtained) << endl;
+void printDifferences(mat3 expected, mat3 obtained) {
+    cout << "Test failed. Expected: " << to_string(expected) << ", obtained: " << to_string(obtained) << endl;
 }
 
 int main() {
@@ -92,24 +92,68 @@ int main() {
 
         HEADER("Exercise 1 tests")
 
-        vec3 view1(2.0f, 0, 0);
-        vec3 up1(0.5f, 5.0f, 0);
+        vec3 view(2.0f, 0, 0);
+        vec3 up(0.5f, 5.0f, 0);
         mat3 result;
 
-        mat3 correctResult1(1.0f, 0, 0,
-                          0, 0, -1.0f,
-                          0, 1.0f, 0);
+        mat3 correctResult(1.0f, 0, 0,
+                           0, 1, 0,
+                           0, 0, -1);
 
         try {
             cout << "Test 1.1: A view on the x axis, an up on the y axis slightly tilted to x" << endl;
 
-            mat3 result = createCoordinateFrame(view1, up1);
+            result = createCoordinateFrame(view, up);
 
-            if(floatsEquals(result, correctResult1)) {
+            if(floatsEquals(result, correctResult)) {
                 cout << "Success" << endl;
             }
             else {
-                cout << "Failure. Result was not the same as the expected: " << endl;
+                printDifferences(correctResult, result);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        view = vec3(0, 1.0f, 0);
+        up = vec3(0, 0.5f, 0.5f);
+
+        correctResult = mat3(0, 1.0f, 0,
+                            0, 0, 1.0f,
+                            -1.0f, 0, 0);
+
+        try {
+            cout << "Test 1.2: A view on the y axis, an up angled 45 degrees between y and z" << endl;
+
+            result = createCoordinateFrame(view, up);
+
+            if(floatsEquals(result, correctResult)) {
+                cout << "Success" << endl;
+            }
+            else {
+                printDifferences(correctResult, result);
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
+
+        view = vec3(1.0f, 0, 0);
+        up = vec3(0, 0, 1.0f);
+
+        correctResult = mat3(1.0f, 0, 0,
+                             0, 0, 1.0f,
+                             0, 1.0f, 0);
+
+        try {
+            cout << "Test 1.3: A view on the x axis, an up on the z axis" << endl;
+
+            result = createCoordinateFrame(view, up);
+
+            if(floatsEquals(result, correctResult)) {
+                cout << "Success" << endl;
+            }
+            else {
+                printDifferences(correctResult, result);
             }
         } catch(char const* message) {
             cout << "Shouldn't have thrown an error: " << message << endl;
