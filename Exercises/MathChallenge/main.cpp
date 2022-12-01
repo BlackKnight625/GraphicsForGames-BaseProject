@@ -3,10 +3,12 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <glm/ext/matrix_relational.hpp>
 
 const float THRESHOLD = (float)1.0e-5;
 #define HEADER(X) std::cout << std::endl << (X) << std::endl << std::endl;
-#define floatEquals(a, b) (std::fabs(a - b) <= THRESHOLD)
+#define floatEquals(a, b) (std::fabs((a) - (b)) <= THRESHOLD)
+#define floatsEquals(a, b) (glm::all(glm::equal(a, b, THRESHOLD)))
 
 using namespace std;
 using namespace glm;
@@ -79,6 +81,10 @@ void exercise3(mat3 matrix1, mat3 matrix2) {
     assert(floatEquals(f1, f2));
 }
 
+void printDifferences(mat4 expected, mat4 obtained) {
+    cout << "Expected: " << to_string(expected) << ", obtained: " << to_string(obtained) << endl;
+}
+
 int main() {
 
     try {
@@ -86,11 +92,28 @@ int main() {
 
         HEADER("Exercise 1 tests")
 
-        vec3 view(2.0f, 0, 0);
-        vec3 up(0.5f, 5.0f, 0);
-        mat3 frame = createCoordinateFrame(view, up);
+        vec3 view1(2.0f, 0, 0);
+        vec3 up1(0.5f, 5.0f, 0);
+        mat3 result;
 
-        cout << "First coordinate frame: " << to_string(frame) << endl;
+        mat3 correctResult1(1.0f, 0, 0,
+                          0, 0, -1.0f,
+                          0, 1.0f, 0);
+
+        try {
+            cout << "Test 1.1: A view on the x axis, an up on the y axis slightly tilted to x" << endl;
+
+            mat3 result = createCoordinateFrame(view1, up1);
+
+            if(floatsEquals(result, correctResult1)) {
+                cout << "Success" << endl;
+            }
+            else {
+                cout << "Failure. Result was not the same as the expected: " << endl;
+            }
+        } catch(char const* message) {
+            cout << "Shouldn't have thrown an error: " << message << endl;
+        }
 
         // Exercise 3
 
@@ -130,7 +153,7 @@ int main() {
         cout << "Random matrix with negative determinant 2: " + to_string(matrixn2) << endl << endl;
 
         try {
-            cout << "Test 1" << endl;
+            cout << "Test 1: 2 identity matrices" << endl;
             exercise3(identity, identity);
 
             cout << "Success" << endl;
@@ -139,7 +162,7 @@ int main() {
         }
 
         try {
-            cout << "Test 2" << endl;
+            cout << "Test 2: 1 matrix with determinant 0 and 1 matrix with determinant equal to 0" << endl;
             exercise3(matrix0, identity);
 
             cout << "Should've thrown an error" << endl;
@@ -148,7 +171,7 @@ int main() {
         }
 
         try {
-            cout << "Test 3" << endl;
+            cout << "Test 3: 1 identity matrix and 1 matrix with determinant equal to 0" << endl;
             exercise3(identity, matrix0);
 
             cout << "Should've thrown an error" << endl;
@@ -157,7 +180,7 @@ int main() {
         }
 
         try {
-            cout << "Test 4" << endl;
+            cout << "Test 4: 1 matrix with positive determinant and 1 identity matrix" << endl;
             exercise3(matrixp1, identity);
 
             cout << "Success" << endl;
@@ -166,7 +189,7 @@ int main() {
         }
 
         try {
-            cout << "Test 5" << endl;
+            cout << "Test 5: 1 negative matrix with positive determinant and 1 identity matrix" << endl;
             exercise3(matrixn1, identity);
 
             cout << "Success" << endl;
@@ -175,7 +198,7 @@ int main() {
         }
 
         try {
-            cout << "Test 6" << endl;
+            cout << "Test 6: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
             exercise3(matrixp1, matrixn1);
 
             cout << "Success" << endl;
