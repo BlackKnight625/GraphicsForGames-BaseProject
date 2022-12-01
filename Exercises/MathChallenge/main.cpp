@@ -233,7 +233,7 @@ int main() {
         }
 
         try {
-            cout << "Test 5: 1 negative matrix with positive determinant and 1 identity matrix" << endl;
+            cout << "Test 5: 1 matrix with negative determinant and 1 identity matrix" << endl;
             exercise3(matrixn1, identity);
 
             cout << "Success" << endl;
@@ -251,7 +251,7 @@ int main() {
         }
 
         try {
-            cout << "Test 7" << endl;
+            cout << "Test 7: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
             exercise3(matrixp1, matrixn2);
 
             cout << "Success" << endl;
@@ -260,7 +260,7 @@ int main() {
         }
 
         try {
-            cout << "Test 8" << endl;
+            cout << "Test 8: 2 matrix with positive determinant" << endl;
             exercise3(matrixp1, matrixp2);
 
             cout << "Success" << endl;
@@ -269,7 +269,7 @@ int main() {
         }
 
         try {
-            cout << "Test 9" << endl;
+            cout << "Test 9: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
             exercise3(matrixp2, matrixn1);
 
             cout << "Success" << endl;
@@ -278,7 +278,7 @@ int main() {
         }
 
         try {
-            cout << "Test 10" << endl;
+            cout << "Test 10: 1 matrix with positive determinant and 1 matrix with negative determinant" << endl;
             exercise3(matrixp2, matrixn2);
 
             cout << "Success" << endl;
