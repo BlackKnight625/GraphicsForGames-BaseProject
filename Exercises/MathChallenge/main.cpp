@@ -74,9 +74,7 @@ void exercise3(mat3 matrix1, mat3 matrix2) {
     }
 
     mat3 cal1 = inverse(matrix1 * matrix2);
-    cout << "(A,B)^-1 = " << to_string(cal1) << endl;
     mat3 cal2 = inverse(matrix2) * inverse(matrix1);
-    cout << "B^-1 * A^-1 = " << to_string(cal2) << endl;
     float f1 = determinant(cal1);
     float f2 = determinant(cal2);
 
@@ -329,18 +327,17 @@ int main() {
         }
 
         try {
-            cout << "Test 2.3: A rotation axis on z, 90 degrees, to vector (0,0,2)" << endl;
+            cout << "Test 2.3: A rotation axis on vector(0,0,0), 90 degrees, to vector (0,0,2)" << endl;
 
-            mat3 rotationMatrix = rodriguesFormula(radians(90.0f), rotationAxisZ);
+            mat3 rotationMatrix = rodriguesFormula(radians(90.0f), vec3(0,0,0));
             resultVec3 = rotationMatrix * exampleZ;
 
             if(floatsEquals(exampleZ, resultVec3)) {
-                cout << "Success" << endl;
-            } else {
-                printDifferencesVec3(exampleZ, resultVec3);
+                cout << "Should've thrown an error" << endl;
+
             }
         } catch(char const* message) {
-            cout << "Shouldn't have thrown an error: " << message << endl;
+            cout << "Success" << endl;
         }
 
         try {
@@ -460,37 +457,31 @@ int main() {
         HEADER("Exercise 3 tests")
 
         mat3 identity(1.0f);
-        cout << "Identity matrix : " << to_string(identity) << endl;
 
         // Matrix with determinant equal to 0
         mat3 matrix0(1.0f, 2.0f, 1.0f,
                      2.0f, 3.0f, 2.0f,
                      1.0f, 2.0f, 1.0f);
-        cout << "Matrix with determinant equal to 0: " << to_string(matrix0) << endl << endl;
 
         // Random matrix with positive determinant 1
         mat3 matrixp1(4.0f, -1.0f, 1.0f,
                      4.0f, 5.0f, 3.0f,
                      -2.0f, 0.0f, 0.0f);
-        cout << "Random matrix with positive determinant 1: " + to_string(matrixp1) << endl << endl;
 
         // Random matrix with positive determinant 2
         mat3x3 matrixp2(4.0f, -1.0f, 1.0f,
                        4.0f, 5.0f, 3.0f,
                        -3.0f, 2.0f, 5.0f);
-        cout << "Random matrix with positive determinant 2: " + to_string(matrixp2) << endl << endl;
 
         // Random matrix with negative determinant 1
         mat3 matrixn1(1.0f, 2.0f, 3.0f,
                      2.0f, 3.0f, 2.0f,
                      3.0f, 2.0f, 1.0f);
-        cout << "Random matrix with negative determinant 1: " + to_string(matrixn1) << endl << endl;
 
         // Random matrix with negative determinant 2
         mat3 matrixn2(1.0f, 2.0f, 3.0f,
                      3.0f, 3.0f, -2.0f,
                      3.0f, 2.0f, 1.0f);
-        cout << "Random matrix with negative determinant 2: " + to_string(matrixn2) << endl << endl;
 
         try {
             cout << "Test 3.1: 2 identity matrices" << endl;
