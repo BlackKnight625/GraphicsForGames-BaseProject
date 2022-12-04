@@ -69,16 +69,16 @@ typedef struct {
 
 const Vertex Vertices[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}}};
+    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}};
 
 const GLubyte Indices[] = {0, 1, 2};
 
 const Vertex VerticesParallelogram[] = {
-    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
     {{0.5f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f, 1.0f}}
+    {{0.75f, 0.25f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}}
 };
 
 const GLubyte IndicesParallelogram[] = { 0, 1, 2, 3 };
@@ -104,7 +104,6 @@ void MyApp::createBufferObjects() {
                    GL_STATIC_DRAW);
     }
   }
-  
   /*
   glBindVertexArray(VaoId);
   {
@@ -117,7 +116,7 @@ void MyApp::createBufferObjects() {
           glVertexAttribPointer(POSITION, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
           glEnableVertexAttribArray(COLOR);
           glVertexAttribPointer(COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-              (GLvoid*)sizeof(Vertices[0].XYZW));
+              (GLvoid*)sizeof(VerticesParallelogram[0].XYZW));
       }
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[1]);
       {
@@ -125,8 +124,8 @@ void MyApp::createBufferObjects() {
               GL_STATIC_DRAW);
       }
   }
-
   */
+
   glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -158,7 +157,21 @@ const glm::mat4 R4 = glm::rotate(glm::radians(-45.0f), glm::vec3(0.0f, 0.0f, 1.0
 const glm::mat4 M4 = glm::translate(glm::vec3(-0.2f, 0.0f, 0.0f)) * R4;
 
 const glm::mat4 R5 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M5 = glm::translate(glm::vec3(1.0f, 0.5f, 0.0f)) * R5;
+const glm::mat4 M5 = glm::translate(glm::vec3(0.85f, 0.35f, 0.0f)) * R5;
+
+/*
+const glm::mat4 R6 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 M6 = glm::translate(glm::vec3(0.15f, 0.0f, 0.0f)) * R6;
+
+const glm::mat4 R7 = glm::rotate(glm::radians(-45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 M7 = glm::translate(glm::vec3(-0.2f, 0.35f, 0.0f)) * R7;
+
+const glm::mat4 R8 = glm::rotate(glm::radians(-135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 M8 = glm::translate(glm::vec3(0.5f, 0.35f, 0.0f)) * R8;
+
+const glm::mat4 R9 = glm::rotate(glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 M9 = glm::translate(glm::vec3(0.5f, 0.0f, 0.0f)) * R9;
+*/
 
 void MyApp::drawScene() {
   // Drawing directly in clip space
@@ -180,6 +193,20 @@ void MyApp::drawScene() {
 
   glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M5));
   glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+
+  /*
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M6));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M7));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M8));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M9));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+  */
 
   Shaders->unbind();
   glBindVertexArray(0);
