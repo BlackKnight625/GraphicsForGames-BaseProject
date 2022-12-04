@@ -37,6 +37,7 @@
 *.db-shm
 *.db-wal
 *.db-opendb
+*.opendb
 
 .idea
 cmake-build-debug
