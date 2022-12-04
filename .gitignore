@@ -34,6 +34,9 @@
 *.suo
 *.db
 *.ipch
+*.db-shm
+*.db-wal
+*.db-opendb
 
 .idea
 cmake-build-debug
