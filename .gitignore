@@ -31,5 +31,9 @@
 *.out
 *.app
 
+*.suo
+*.db
+*.ipch
+
 .idea
 cmake-build-debug
