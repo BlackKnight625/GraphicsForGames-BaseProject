@@ -39,5 +39,6 @@
 *.db-opendb
 *.opendb
 
+/Tangram/TangramSolution/Tangram/intermediate/Debug/
 .idea
 cmake-build-debug
