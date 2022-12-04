@@ -68,11 +68,20 @@ typedef struct {
 } Vertex;
 
 const Vertex Vertices[] = {
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.75f, 0.25f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-    {{0.50f, 0.75f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}}};
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}}};
 
 const GLubyte Indices[] = {0, 1, 2};
+
+const Vertex VerticesParallelogram[] = {
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {0.0f, 0.0f, 0.0f, 1.0f}}
+};
+
+const GLubyte IndicesParallelogram[] = { 0, 1, 2, 3 };
 
 void MyApp::createBufferObjects() {
   glGenVertexArrays(1, &VaoId);
@@ -95,6 +104,29 @@ void MyApp::createBufferObjects() {
                    GL_STATIC_DRAW);
     }
   }
+  
+  /*
+  glBindVertexArray(VaoId);
+  {
+      glGenBuffers(2, VboId);
+
+      glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
+      {
+          glBufferData(GL_ARRAY_BUFFER, sizeof(VerticesParallelogram), VerticesParallelogram, GL_STATIC_DRAW);
+          glEnableVertexAttribArray(POSITION);
+          glVertexAttribPointer(POSITION, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+          glEnableVertexAttribArray(COLOR);
+          glVertexAttribPointer(COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+              (GLvoid*)sizeof(Vertices[0].XYZW));
+      }
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[1]);
+      {
+          glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(IndicesParallelogram), IndicesParallelogram,
+              GL_STATIC_DRAW);
+      }
+  }
+
+  */
   glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -111,8 +143,22 @@ void MyApp::destroyBufferObjects() {
 
 ////////////////////////////////////////////////////////////////////////// SCENE
 
-const glm::mat4 I(1.0f);
-const glm::mat4 M = glm::translate(glm::vec3(-1.0f, -1.0f, 0.0f));
+const glm::mat4 R1 = glm::rotate(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 M1 = glm::translate(glm::vec3(-0.5f, 0.0f, 0.0f)) * R1;
+
+const glm::mat4 S1 = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 1.0f));
+const glm::mat4 R2 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f)) * S1;
+const glm::mat4 M2 = glm::translate(glm::vec3(0.2f, -0.4f, 0.0f)) * R2;
+
+const glm::mat4 R3 = glm::rotate(glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 M3 = glm::translate(glm::vec3(-0.5f, -0.75f, 0.0f)) * R3;
+
+const glm::mat4 S2 = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 1.0f));
+const glm::mat4 R4 = glm::rotate(glm::radians(-45.0f), glm::vec3(0.0f, 0.0f, 1.0f)) * S2;
+const glm::mat4 M4 = glm::translate(glm::vec3(-0.2f, 0.0f, 0.0f)) * R4;
+
+const glm::mat4 R5 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 M5 = glm::translate(glm::vec3(1.0f, 0.5f, 0.0f)) * R5;
 
 void MyApp::drawScene() {
   // Drawing directly in clip space
@@ -120,11 +166,20 @@ void MyApp::drawScene() {
   glBindVertexArray(VaoId);
   Shaders->bind();
 
-  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
-  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid *)0);
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M1));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
 
-  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M));
-  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid *)0);
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M2));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M3));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M4));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M5));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
 
   Shaders->unbind();
   glBindVertexArray(0);

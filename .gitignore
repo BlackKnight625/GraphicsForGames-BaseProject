@@ -31,9 +31,7 @@
 *.out
 *.app
 
-
 # Debug for Tangram
-/Tangram/TangramSolution/Tangram/intermediate/Debug/
 *.suo
 *.db
 *.ipch
@@ -41,8 +39,7 @@
 *.db-wal
 *.db-opendb
 *.opendb
-*.ilk
-*.log
+/Tangram/TangramSolution/Tangram/intermediate/
 
 .idea
 cmake-build-debug
