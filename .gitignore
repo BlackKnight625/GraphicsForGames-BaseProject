@@ -37,6 +37,7 @@
 *.db-wal
 *.db-opendb
 *.opendb
+*.pdb
 /Tangram/TangramSolution/Tangram/intermediate/
 
 .idea
