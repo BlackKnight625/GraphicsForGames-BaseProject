@@ -38,8 +38,6 @@ private:
   GLint MatrixId;
 
   void createShaderProgram();
-  void createBufferObjects();
-  void destroyBufferObjects();
   void drawScene();
 };
 
@@ -62,53 +60,48 @@ void MyApp::createShaderProgram() {
 
 //////////////////////////////////////////////////////////////////// VAOs & VBOs
 
-typedef struct {
-  GLfloat XYZW[4];
-  GLfloat RGBA[4];
-} Vertex;
+
 
 const Vertex Vertices[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}};
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
 
-const GLubyte Indices[] = {0, 1, 2};
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
 
-void MyApp::createBufferObjects() {
-  glGenVertexArrays(1, &VaoId);
-  glBindVertexArray(VaoId);
-  {
-    glGenBuffers(2, VboId);
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+};
 
-    glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
-    {
-      glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
-      glEnableVertexAttribArray(POSITION);
-      glVertexAttribPointer(POSITION, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-      glEnableVertexAttribArray(COLOR);
-      glVertexAttribPointer(COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                            (GLvoid *)sizeof(Vertices[0].XYZW));
-    }
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[1]);
-    {
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices,
-                   GL_STATIC_DRAW);
-    }
-  }
+const GLubyte Indices[] = { 0, 1, 2,
+                           3, 4, 5,
+                           6, 7, 8,
+};
 
-  glBindVertexArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-  glDeleteBuffers(2, VboId);
-}
+const Vertex VerticesSquare[] = {
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.0f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+};
 
-void MyApp::destroyBufferObjects() {
-  glBindVertexArray(VaoId);
-  glDisableVertexAttribArray(POSITION);
-  glDisableVertexAttribArray(COLOR);
-  glDeleteVertexArrays(1, &VaoId);
-  glBindVertexArray(0);
-}
+const GLubyte IndicesSquare[] = { 0, 1, 3,
+                           3, 2, 1
+};
+
+const Vertex VerticesParallelogram[] = {
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.0f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+};
+
+const GLubyte IndicesParallelogram[] = { 0, 1, 3,
+                           3, 2, 1
+};
 
 ////////////////////////////////////////////////////////////////////////// SCENE
 
