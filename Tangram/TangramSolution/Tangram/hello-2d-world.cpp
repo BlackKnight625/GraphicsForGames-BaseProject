@@ -21,6 +21,7 @@
 
 #include "mgl/mgl.hpp"
 #include "Entity.h"
+#include "Entity.cpp"
 
 ////////////////////////////////////////////////////////////////////////// MYAPP
 
@@ -79,16 +80,15 @@ private:
   GLuint VaoId, VboId[2];
   mgl::ShaderProgram *Shaders;
   GLint MatrixId;
-
   void createShaderProgram();
 };
 
 //////////////////////////////////////////////////////////////////////// SHADERs
 
-typedef struct {
-    GLfloat XYZW[4];
-    GLfloat RGBA[4];
-} Vertex;
+
+Entity triangle(Vertices, Indices);
+Entity square(VerticesSquare, IndicesSquare);
+Entity parallelogram(VerticesParallelogram, IndicesParallelogram);
 
 void MyApp::createShaderProgram() {
 
@@ -107,25 +107,7 @@ void MyApp::createShaderProgram() {
 
 //////////////////////////////////////////////////////////////////// VAOs & VBOs
 
-
 ////////////////////////////////////////////////////////////////////////// SCENE
-
-const glm::mat4 R1 = glm::rotate(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M1 = glm::translate(glm::vec3(-0.5f, 0.0f, 0.0f)) * R1;
-
-const glm::mat4 S1 = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 1.0f));
-const glm::mat4 R2 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f)) * S1;
-const glm::mat4 M2 = glm::translate(glm::vec3(0.2f, -0.4f, 0.0f)) * R2;
-
-const glm::mat4 R3 = glm::rotate(glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M3 = glm::translate(glm::vec3(-0.5f, -0.75f, 0.0f)) * R3;
-
-const glm::mat4 S2 = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 1.0f));
-const glm::mat4 R4 = glm::rotate(glm::radians(-45.0f), glm::vec3(0.0f, 0.0f, 1.0f)) * S2;
-const glm::mat4 M4 = glm::translate(glm::vec3(-0.2f, 0.0f, 0.0f)) * R4;
-
-const glm::mat4 R5 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M5 = glm::translate(glm::vec3(0.85f, 0.35f, 0.0f)) * R5;
 
 const glm::mat4 R6 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 const glm::mat4 M6 = glm::translate(glm::vec3(0.15f, 0.0f, 0.0f)) * R6;
@@ -142,9 +124,6 @@ const glm::mat4 M9 = glm::translate(glm::vec3(0.5f, 0.0f, 0.0f)) * R9;
 ////////////////////////////////////////////////////////////////////// CALLBACKS
 
 void MyApp::initCallback(GLFWwindow *win) {
-  Entity triangle(Vertices, Indices);
-  Entity square(VerticesSquare, IndicesSquare);
-  Entity parallelogram(VerticesParallelogram, IndicesParallelogram);
   triangle.createBufferObjects(POSITION, COLOR, VaoId, VboId, Vertices, Indices);
   createShaderProgram();
   square.createBufferObjects(POSITION, COLOR, VaoId, VboId, VerticesSquare, IndicesSquare);
