@@ -73,6 +73,7 @@ public:
   void displayCallback(GLFWwindow *win, double elapsed) override;
   void windowCloseCallback(GLFWwindow *win) override;
   void windowSizeCallback(GLFWwindow *win, int width, int height) override;
+  void createCrab();
 
 private:
   const GLuint POSITION = 0, COLOR = 1;
@@ -84,9 +85,53 @@ private:
 //////////////////////////////////////////////////////////////////////// SHADERs
 
 
+
 Entity triangle(Vertices, Indices, sizeof(Vertices), sizeof(Indices));
 Entity square(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare));
 Entity parallelogram(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram));
+
+inline Entity createBaseTriangle() {
+    return Entity(Vertices, Indices, sizeof(Vertices), sizeof(Indices));
+}
+
+inline Entity createBaseSquare() {
+    return Entity(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare));
+}
+
+inline Entity createBaseParallelogram() {
+    return Entity(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram));
+}
+
+void MyApp::createCrab() {
+    const int amountTriangles = 5;
+
+    char aux[sizeof(Entity) * amountTriangles];
+    Entity *triangles = (Entity*) aux;
+
+    for (int i = 0; i < amountTriangles; i++) {
+        triangles[i] = createBaseTriangle();
+    }
+
+    Entity square = createBaseSquare();
+    Entity parallelogram = createBaseParallelogram();
+
+    triangles[0].rotate(90, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[0].translate(glm::vec3(-0.5f, 0.0f, 0.0f));
+
+    triangles[1].scale(glm::vec3(2.0f, 2.0f, 1.0f));
+    triangles[1].rotate(135, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[1].translate(glm::vec3(0.2f, -0.4f, 0.0f));
+
+    triangles[2].rotate(45, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[2].translate(glm::vec3(-0.5f, -0.75f, 0.0f));
+
+    triangles[3].scale(glm::vec3(2.0f, 2.0f, 1.0f));
+    triangles[3].rotate(-45, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[3].translate(glm::vec3(-0.2f, 0.0f, 0.0f));
+
+    triangles[4].rotate(135, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[4].translate(glm::vec3(0.85f, 0.35f, 0.0f));
+}
 
 void MyApp::createShaderProgram() {
 

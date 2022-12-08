@@ -8,13 +8,6 @@
 #include <glm/gtx/transform.hpp>
 #include "mgl/mgl.hpp"
 
-Entity::Entity(const Vertex *Vertices, const GLubyte *Indices, const int VerticesSize, const int IndicesSize) {
-    Entity::vertices = Vertices;
-    Entity::verticesSize = VerticesSize;
-    Entity::indices = Indices;
-    Entity::indicesSize == IndicesSize;
-}
-
 void Entity::createBufferObjects(const GLuint POSITION, const GLuint COLOR) {
     glGenVertexArrays(1, &VaoId);
     glBindVertexArray(VaoId);
@@ -68,26 +61,27 @@ const glm::mat4 M4 = glm::translate(glm::vec3(-0.2f, 0.0f, 0.0f)) * R4;
 const glm::mat4 R5 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 const glm::mat4 M5 = glm::translate(glm::vec3(0.85f, 0.35f, 0.0f)) * R5;
 
+void Entity::translate(glm::vec3 translation) {
+    model = glm::translate(translation) * model;
+}
+
+void Entity::rotate(float degrees, glm::vec3 rotationAxis) {
+    model = glm::rotate(glm::radians(degrees), rotationAxis) * model;
+}
+
+void Entity::scale(glm::vec3 scale) {
+    model = glm::scale(scale) * model;
+}
+
+
 void Entity::drawScene(mgl::ShaderProgram *Shaders, GLint MatrixId) {
     // Drawing directly in clip space
 
     glBindVertexArray(VaoId);
     Shaders->bind();
 
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M1));
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
-
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M2));
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
-
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M3));
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
-
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M4));
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
-
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M5));
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(model));
+    glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_BYTE, (GLvoid*)0);
 
     Shaders->unbind();
     glBindVertexArray(0);
