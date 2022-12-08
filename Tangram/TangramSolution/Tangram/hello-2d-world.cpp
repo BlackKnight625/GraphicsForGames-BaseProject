@@ -84,9 +84,9 @@ private:
 //////////////////////////////////////////////////////////////////////// SHADERs
 
 
-Entity triangle(Vertices, Indices);
-Entity square(VerticesSquare, IndicesSquare);
-Entity parallelogram(VerticesParallelogram, IndicesParallelogram);
+Entity triangle(Vertices, Indices, sizeof(Vertices), sizeof(Indices));
+Entity square(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare));
+Entity parallelogram(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram));
 
 void MyApp::createShaderProgram() {
 
@@ -122,7 +122,7 @@ const glm::mat4 M9 = glm::translate(glm::vec3(0.5f, 0.0f, 0.0f)) * R9;
 ////////////////////////////////////////////////////////////////////// CALLBACKS
 
 void MyApp::initCallback(GLFWwindow *win) {
-  triangle.createBufferObjects(POSITION, COLOR, Vertices, Indices);
+  triangle.createBufferObjects(POSITION, COLOR);
   createShaderProgram();
   //square.createBufferObjects(POSITION, COLOR, VaoId, VboId, VerticesSquare, IndicesSquare);
   //createShaderProgram();

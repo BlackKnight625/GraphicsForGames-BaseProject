@@ -8,12 +8,14 @@
 #include <glm/gtx/transform.hpp>
 #include "mgl/mgl.hpp"
 
-Entity::Entity(const Vertex *Vertices, const GLubyte *Indices) {
+Entity::Entity(const Vertex *Vertices, const GLubyte *Indices, const int VerticesSize, const int IndicesSize) {
     Entity::vertices = Vertices;
+    Entity::verticesSize = VerticesSize;
     Entity::indices = Indices;
+    Entity::indicesSize == IndicesSize;
 }
 
-void Entity::createBufferObjects(const GLuint POSITION, const GLuint COLOR, const Vertex* Vertices, const GLubyte* Indices) {
+void Entity::createBufferObjects(const GLuint POSITION, const GLuint COLOR) {
     glGenVertexArrays(1, &VaoId);
     glBindVertexArray(VaoId);
     {
@@ -21,16 +23,16 @@ void Entity::createBufferObjects(const GLuint POSITION, const GLuint COLOR, cons
 
         glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
         {
-            glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
             glEnableVertexAttribArray(POSITION);
             glVertexAttribPointer(POSITION, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
             glEnableVertexAttribArray(COLOR);
             glVertexAttribPointer(COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-                (GLvoid*)sizeof(Vertices[0].XYZW));
+                (GLvoid*)sizeof(vertices[0].XYZW));
         }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[1]);
         {
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices,
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices,
                 GL_STATIC_DRAW);
         }
     }

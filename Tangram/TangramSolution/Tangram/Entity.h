@@ -18,11 +18,13 @@ class Entity
 private:
 	GLuint VaoId, VboId[2];
 	const Vertex *vertices;
+	int verticesSize;
 	const GLubyte *indices;
+	int indicesSize;
 
 public:
-	Entity(const Vertex *Vertices, const GLubyte *Indices);
-	void createBufferObjects(const GLuint POSITION, const GLuint COLOR, const Vertex* Vertices, const GLubyte* Indices);
+	Entity(const Vertex *Vertices, const GLubyte *Indices, const int VerticesSize, const int IndicesSize);
+	void createBufferObjects(const GLuint POSITION, const GLuint COLOR);
     void destroyBufferObjects(const GLuint POSITION, const GLuint COLOR);
 	void drawScene(mgl::ShaderProgram *Shaders, GLint MatrixId);
 };
