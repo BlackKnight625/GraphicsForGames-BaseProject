@@ -1,4 +1,12 @@
+#pragma once
+
 #include "Entity.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
+#include "mgl/mgl.hpp"
 
 Entity::Entity(const Vertex *Vertices, const GLubyte *Indices) {
     Entity::vertices = Vertices;

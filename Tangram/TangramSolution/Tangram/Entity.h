@@ -1,8 +1,12 @@
-#pragma once
+#ifndef TANGRAM_ENTITY_H
+#define TANGRAM_ENTITY_H
 
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include "hello-2d-world.cpp"
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
+#include "mgl/mgl.hpp"
 
 typedef struct {
 	GLfloat XYZW[4];
@@ -22,3 +26,4 @@ public:
 	void drawScene(GLuint VaoId, mgl::ShaderProgram *Shaders, GLint MatrixId);
 };
 
+#endif
