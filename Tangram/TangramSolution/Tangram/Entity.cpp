@@ -86,3 +86,18 @@ void Entity::drawScene(mgl::ShaderProgram *Shaders, GLint MatrixId) {
     Shaders->unbind();
     glBindVertexArray(0);
 }
+
+
+// Mesh
+
+
+
+// Shader
+
+void Shaders::bind() {
+    shaderProgram->bind();
+}
+
+void Shaders::unbind() {
+    shaderProgram->unbind();
+}

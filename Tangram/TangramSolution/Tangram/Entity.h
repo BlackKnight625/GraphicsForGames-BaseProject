@@ -43,4 +43,41 @@ public:
 	void scale(glm::vec3 scale);
 };
 
+class Mesh {
+private:
+	GLuint VaoId, VboId[2];
+	const Vertex* vertices;
+	int verticesSize;
+	const GLubyte* indices;
+	int indicesSize;
+
+public:
+	Mesh(const Vertex* Vertices, const GLubyte* Indices, const int VerticesSize, const int IndicesSize) {
+		vertices = Vertices;
+		indices = Indices;
+		verticesSize = VerticesSize;
+		indicesSize = IndicesSize;
+	}
+
+	Mesh() {}
+
+	void bind();
+	void unbind();
+};
+
+class Shaders {
+private:
+	mgl::ShaderProgram* shaderProgram;
+
+public:
+	Shaders(mgl::ShaderProgram* ShaderProgram) {
+		shaderProgram = ShaderProgram;
+	}
+
+	Shaders() {}
+
+	void bind();
+	void unbind();
+};
+
 #endif
