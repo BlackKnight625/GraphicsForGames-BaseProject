@@ -27,8 +27,8 @@
 
 const Vertex Vertices[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+    {{0.35f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.35f, 0.35f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
 };
 
 const GLubyte Indices[] = { 0, 1, 2
@@ -36,9 +36,9 @@ const GLubyte Indices[] = { 0, 1, 2
 
 const Vertex VerticesSquare[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.0f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+    {{0.35f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.35f, 0.35f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.0f, 0.35f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
 };
 
 const GLubyte IndicesSquare[] = { 0, 1, 3,
@@ -47,9 +47,9 @@ const GLubyte IndicesSquare[] = { 0, 1, 3,
 
 const Vertex VerticesParallelogram[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+    {{0.35f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.7f, 0.35f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.35f, 0.35f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
 };
 
 const GLubyte IndicesParallelogram[] = { 0, 1, 3,
@@ -118,26 +118,27 @@ void MyApp::createCrab() {
     *square = createBaseSquare();
     *parallelogram = createBaseParallelogram();
 
-    triangles[0].rotate(90, glm::vec3(0.0f, 0.0f, 1.0f));
-    triangles[0].translate(glm::vec3(-0.5f, 0.0f, 0.0f));
+    triangles[0].scale(glm::vec3(1.5f, 1.5f, 1.0f));
+    triangles[0].rotate(-135, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[0].translate(glm::vec3(-0.5f, 0.7f, 0.0f));
 
     triangles[1].scale(glm::vec3(2.0f, 2.0f, 1.0f));
-    triangles[1].rotate(135, glm::vec3(0.0f, 0.0f, 1.0f));
-    triangles[1].translate(glm::vec3(0.2f, -0.4f, 0.0f));
+    triangles[1].rotate(-90, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[1].translate(glm::vec3(-0.5f, 0.35f, 0.0f));
 
-    triangles[2].rotate(45, glm::vec3(0.0f, 0.0f, 1.0f));
-    triangles[2].translate(glm::vec3(-0.5f, -0.75f, 0.0f));
+    triangles[2].rotate(180, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[2].translate(glm::vec3(-0.15f, -0.35f, 0.0f));
 
     triangles[3].scale(glm::vec3(2.0f, 2.0f, 1.0f));
-    triangles[3].rotate(-45, glm::vec3(0.0f, 0.0f, 1.0f));
-    triangles[3].translate(glm::vec3(-0.2f, 0.0f, 0.0f));
+    triangles[3].rotate(90, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[3].translate(glm::vec3(0.55f, -0.7f, 0.0f));
 
-    triangles[4].rotate(135, glm::vec3(0.0f, 0.0f, 1.0f));
-    triangles[4].translate(glm::vec3(0.85f, 0.35f, 0.0f));
+    triangles[4].rotate(-90, glm::vec3(0.0f, 0.0f, 1.0f));
+    triangles[4].translate(glm::vec3(0.55f, 0.7f, 0.0f));
 
-    square->translate(glm::vec3(-0.25f, 0.0f, 0.0f));
+    square->translate(glm::vec3(-0.15f, 0.0f, 0.0f));
 
-    parallelogram->translate(glm::vec3(0.25f, 0.0f, 0.0f));
+    parallelogram->translate(glm::vec3(0.2f, 0.0f, 0.0f));
 }
 
 void MyApp::createShaderProgram() {
