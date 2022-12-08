@@ -27,43 +27,33 @@
 
 const Vertex Vertices[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-
-    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-
-    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
 };
 
-const GLubyte Indices[] = { 0, 1, 2,
-                           3, 4, 5,
-                           6, 7, 8,
+const GLubyte Indices[] = { 0, 1, 2
 };
 
 const Vertex VerticesSquare[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.0f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.0f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
 };
 
 const GLubyte IndicesSquare[] = { 0, 1, 3,
-                           3, 2, 1
+                           1, 2, 3
 };
 
 const Vertex VerticesParallelogram[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.0f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
 };
 
 const GLubyte IndicesParallelogram[] = { 0, 1, 3,
-                           3, 2, 1
+                           1, 2, 3
 };
 
 class MyApp : public mgl::App {
@@ -74,6 +64,9 @@ public:
   void windowCloseCallback(GLFWwindow *win) override;
   void windowSizeCallback(GLFWwindow *win, int width, int height) override;
   void createCrab();
+  void drawCrab();
+  void destroyCrab();
+  void createCrabBuffer();
 
 private:
   const GLuint POSITION = 0, COLOR = 1;
@@ -81,6 +74,14 @@ private:
   GLint MatrixId;
   void createShaderProgram();
 };
+
+const int crabAmountEntities = 7;
+
+typedef struct {
+    Entity entities[crabAmountEntities];
+} Crab;
+
+Crab crab;
 
 //////////////////////////////////////////////////////////////////////// SHADERs
 
@@ -105,15 +106,17 @@ inline Entity createBaseParallelogram() {
 void MyApp::createCrab() {
     const int amountTriangles = 5;
 
-    char aux[sizeof(Entity) * amountTriangles];
-    Entity *triangles = (Entity*) aux;
+    Entity *triangles = crab.entities;
 
     for (int i = 0; i < amountTriangles; i++) {
         triangles[i] = createBaseTriangle();
     }
 
-    Entity square = createBaseSquare();
-    Entity parallelogram = createBaseParallelogram();
+    Entity* square = crab.entities + amountTriangles;
+    Entity* parallelogram = crab.entities + amountTriangles + 1;
+
+    *square = createBaseSquare();
+    *parallelogram = createBaseParallelogram();
 
     triangles[0].rotate(90, glm::vec3(0.0f, 0.0f, 1.0f));
     triangles[0].translate(glm::vec3(-0.5f, 0.0f, 0.0f));
@@ -131,6 +134,10 @@ void MyApp::createCrab() {
 
     triangles[4].rotate(135, glm::vec3(0.0f, 0.0f, 1.0f));
     triangles[4].translate(glm::vec3(0.85f, 0.35f, 0.0f));
+
+    square->translate(glm::vec3(-0.25f, 0.0f, 0.0f));
+
+    parallelogram->translate(glm::vec3(0.25f, 0.0f, 0.0f));
 }
 
 void MyApp::createShaderProgram() {
@@ -166,29 +173,40 @@ const glm::mat4 M9 = glm::translate(glm::vec3(0.5f, 0.0f, 0.0f)) * R9;
 
 ////////////////////////////////////////////////////////////////////// CALLBACKS
 
+void MyApp::createCrabBuffer() {
+    for (int i = 0; i < crabAmountEntities; i++) {
+        crab.entities[i].createBufferObjects(POSITION, COLOR);
+        createShaderProgram();
+    }
+}
+
 void MyApp::initCallback(GLFWwindow *win) {
-  triangle.createBufferObjects(POSITION, COLOR);
-  createShaderProgram();
-  //square.createBufferObjects(POSITION, COLOR, VaoId, VboId, VerticesSquare, IndicesSquare);
-  //createShaderProgram();
-  //parallelogram.createBufferObjects(POSITION, COLOR, VaoId, VboId, VerticesParallelogram, IndicesParallelogram);
-  //createShaderProgram();
+    createCrab();
+    createCrabBuffer();
+}
+
+void MyApp::destroyCrab() {
+    for (int i = 0; i < crabAmountEntities; i++) {
+        crab.entities[i].destroyBufferObjects(POSITION, COLOR);
+    }
 }
 
 void MyApp::windowCloseCallback(GLFWwindow *win) {
-    triangle.destroyBufferObjects(POSITION, COLOR);
-    //square.destroyBufferObjects(POSITION, COLOR, VaoId);
-    //parallelogram.destroyBufferObjects(POSITION, COLOR, VaoId);
+    destroyCrab();
 }
 
 void MyApp::windowSizeCallback(GLFWwindow *win, int winx, int winy) {
   glViewport(0, 0, winx, winy);
 }
 
+void MyApp::drawCrab() {
+    for (int i = 0; i < crabAmountEntities; i++) {
+        crab.entities[i].drawScene(Shaders, MatrixId);
+    }
+}
+
 void MyApp::displayCallback(GLFWwindow *win, double elapsed) {
-    triangle.drawScene(Shaders, MatrixId);
-    //square.drawScene(VaoId, Shaders, MatrixId);
-    //parallelogram.drawScene(VaoId, Shaders, MatrixId);
+    drawCrab();
 }
 
 /////////////////////////////////////////////////////////////////////////// MAIN

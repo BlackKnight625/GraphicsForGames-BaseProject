@@ -33,6 +33,8 @@ public:
 		model = glm::mat4(1.0f);
 	}
 
+	Entity() {}
+
 	void createBufferObjects(const GLuint POSITION, const GLuint COLOR);
     void destroyBufferObjects(const GLuint POSITION, const GLuint COLOR);
 	void drawScene(mgl::ShaderProgram *Shaders, GLint MatrixId);
