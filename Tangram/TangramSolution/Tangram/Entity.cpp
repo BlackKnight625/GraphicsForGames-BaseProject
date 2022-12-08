@@ -13,7 +13,7 @@ Entity::Entity(const Vertex *Vertices, const GLubyte *Indices) {
     Entity::indices = Indices;
 }
 
-void Entity::createBufferObjects(const GLuint POSITION, const GLuint COLOR, GLuint VaoId, GLuint* VboId, const Vertex* Vertices, const GLubyte* Indices) {
+void Entity::createBufferObjects(const GLuint POSITION, const GLuint COLOR, const Vertex* Vertices, const GLubyte* Indices) {
     glGenVertexArrays(1, &VaoId);
     glBindVertexArray(VaoId);
     {
@@ -41,7 +41,7 @@ void Entity::createBufferObjects(const GLuint POSITION, const GLuint COLOR, GLui
     glDeleteBuffers(2, VboId);
 }
 
-void Entity::destroyBufferObjects(const GLuint POSITION, const GLuint COLOR, GLuint VaoId) {
+void Entity::destroyBufferObjects(const GLuint POSITION, const GLuint COLOR) {
     glBindVertexArray(VaoId);
     glDisableVertexAttribArray(POSITION);
     glDisableVertexAttribArray(COLOR);
@@ -66,7 +66,7 @@ const glm::mat4 M4 = glm::translate(glm::vec3(-0.2f, 0.0f, 0.0f)) * R4;
 const glm::mat4 R5 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 const glm::mat4 M5 = glm::translate(glm::vec3(0.85f, 0.35f, 0.0f)) * R5;
 
-void Entity::drawScene(GLuint VaoId, mgl::ShaderProgram *Shaders, GLint MatrixId) {
+void Entity::drawScene(mgl::ShaderProgram *Shaders, GLint MatrixId) {
     // Drawing directly in clip space
 
     glBindVertexArray(VaoId);

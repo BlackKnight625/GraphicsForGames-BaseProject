@@ -16,14 +16,15 @@ typedef struct {
 class Entity
 {
 private:
+	GLuint VaoId, VboId[2];
 	const Vertex *vertices;
 	const GLubyte *indices;
 
 public:
 	Entity(const Vertex *Vertices, const GLubyte *Indices);
-	void createBufferObjects(const GLuint POSITION, const GLuint COLOR, GLuint VaoId, GLuint* VboId, const Vertex* Vertices, const GLubyte* Indices);
-    void destroyBufferObjects(const GLuint POSITION, const GLuint COLOR, GLuint VaoId);
-	void drawScene(GLuint VaoId, mgl::ShaderProgram *Shaders, GLint MatrixId);
+	void createBufferObjects(const GLuint POSITION, const GLuint COLOR, const Vertex* Vertices, const GLubyte* Indices);
+    void destroyBufferObjects(const GLuint POSITION, const GLuint COLOR);
+	void drawScene(mgl::ShaderProgram *Shaders, GLint MatrixId);
 };
 
 #endif

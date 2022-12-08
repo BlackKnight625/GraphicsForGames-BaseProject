@@ -76,7 +76,6 @@ public:
 
 private:
   const GLuint POSITION = 0, COLOR = 1;
-  GLuint VaoId, VboId[2];
   mgl::ShaderProgram *Shaders;
   GLint MatrixId;
   void createShaderProgram();
@@ -123,18 +122,18 @@ const glm::mat4 M9 = glm::translate(glm::vec3(0.5f, 0.0f, 0.0f)) * R9;
 ////////////////////////////////////////////////////////////////////// CALLBACKS
 
 void MyApp::initCallback(GLFWwindow *win) {
-  triangle.createBufferObjects(POSITION, COLOR, VaoId, VboId, Vertices, Indices);
+  triangle.createBufferObjects(POSITION, COLOR, Vertices, Indices);
   createShaderProgram();
-  square.createBufferObjects(POSITION, COLOR, VaoId, VboId, VerticesSquare, IndicesSquare);
-  createShaderProgram();
-  parallelogram.createBufferObjects(POSITION, COLOR, VaoId, VboId, VerticesParallelogram, IndicesParallelogram);
-  createShaderProgram();
+  //square.createBufferObjects(POSITION, COLOR, VaoId, VboId, VerticesSquare, IndicesSquare);
+  //createShaderProgram();
+  //parallelogram.createBufferObjects(POSITION, COLOR, VaoId, VboId, VerticesParallelogram, IndicesParallelogram);
+  //createShaderProgram();
 }
 
 void MyApp::windowCloseCallback(GLFWwindow *win) {
-    triangle.destroyBufferObjects(POSITION, COLOR, VaoId);
-    square.destroyBufferObjects(POSITION, COLOR, VaoId);
-    parallelogram.destroyBufferObjects(POSITION, COLOR, VaoId);
+    triangle.destroyBufferObjects(POSITION, COLOR);
+    //square.destroyBufferObjects(POSITION, COLOR, VaoId);
+    //parallelogram.destroyBufferObjects(POSITION, COLOR, VaoId);
 }
 
 void MyApp::windowSizeCallback(GLFWwindow *win, int winx, int winy) {
@@ -142,9 +141,9 @@ void MyApp::windowSizeCallback(GLFWwindow *win, int winx, int winy) {
 }
 
 void MyApp::displayCallback(GLFWwindow *win, double elapsed) {
-    triangle.drawScene(VaoId, Shaders, MatrixId);
-    square.drawScene(VaoId, Shaders, MatrixId);
-    parallelogram.drawScene(VaoId, Shaders, MatrixId);
+    triangle.drawScene(Shaders, MatrixId);
+    //square.drawScene(VaoId, Shaders, MatrixId);
+    //parallelogram.drawScene(VaoId, Shaders, MatrixId);
 }
 
 /////////////////////////////////////////////////////////////////////////// MAIN
