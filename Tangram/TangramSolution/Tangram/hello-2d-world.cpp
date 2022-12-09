@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////// MYAPP
 
 
-const Vertex Vertices[] = {
+Vertex Vertices[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.35f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.35f, 0.35f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
@@ -34,7 +34,7 @@ const Vertex Vertices[] = {
 const GLubyte Indices[] = { 0, 1, 2
 };
 
-const Vertex VerticesSquare[] = {
+Vertex VerticesSquare[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.35f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.35f, 0.35f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
@@ -45,7 +45,7 @@ const GLubyte IndicesSquare[] = { 0, 1, 3,
                            1, 2, 3
 };
 
-const Vertex VerticesParallelogram[] = {
+Vertex VerticesParallelogram[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.35f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.7f, 0.35f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
@@ -67,9 +67,9 @@ public:
   void drawCrab();
   void destroyCrab();
   void createCrabBuffer();
-  inline Entity createBaseTriangle();
-  inline Entity createBaseSquare();
-  inline Entity createBaseParallelogram();
+  inline Entity createBaseTriangle(glm::vec4 color);
+  inline Entity createBaseSquare(glm::vec4 color);
+  inline Entity createBaseParallelogram(glm::vec4 color);
 
 private:
   const GLuint POSITION = 0, COLOR = 1;
@@ -88,32 +88,47 @@ Crab crab;
 
 //////////////////////////////////////////////////////////////////////// SHADERs
 
-inline Entity MyApp::createBaseTriangle() {
-    return Entity(Vertices, Indices, sizeof(Vertices), sizeof(Indices), Shaders);
+inline Entity MyApp::createBaseTriangle(glm::vec4 color) {
+    return Entity(Vertices, Indices, sizeof(Vertices), sizeof(Indices), Shaders, color);
 }
 
-inline Entity MyApp::createBaseSquare() {
-    return Entity(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare), Shaders);
+inline Entity MyApp::createBaseSquare(glm::vec4 color) {
+    return Entity(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare), Shaders, color);
 }
 
-inline Entity MyApp::createBaseParallelogram() {
-    return Entity(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram), Shaders);
+inline Entity MyApp::createBaseParallelogram(glm::vec4 color) {
+    return Entity(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram), Shaders, color);
 }
 
 void MyApp::createCrab() {
     const int amountTriangles = 5;
 
+    glm::vec4 colors[] = {
+        glm::vec4(1.0f, 155.0f, 244.0f, 255.0f), // Blue
+        glm::vec4(251.0f, 49.0f, 73.0f, 255.0f), // Red
+        glm::vec4(255.0f, 189.0f, 73.0f, 255.0f), // Yellow
+        glm::vec4(255.0f, 125.0f, 76.0f, 255.0f), // Orange
+        glm::vec4(210.0f,  1.0f, 139.0f, 255.0f), // Light purple
+        glm::vec4(105.0f, 11.0f, 168.0f, 255.0f), // Purple
+        glm::vec4(122.0f, 200.0f, 101.0f, 255.0f), // Green
+    };
+
+    // Converting the colors from RGB 256 to RGB 1.0f
+    for (int i = 0; i < crabAmountEntities; i++) {
+        colors[i] /= 255.0f;
+    }
+
     Entity *triangles = crab.entities;
 
     for (int i = 0; i < amountTriangles; i++) {
-        triangles[i] = createBaseTriangle();
+        triangles[i] = createBaseTriangle(colors[i]);
     }
 
     Entity* square = crab.entities + amountTriangles;
     Entity* parallelogram = crab.entities + amountTriangles + 1;
 
-    *square = createBaseSquare();
-    *parallelogram = createBaseParallelogram();
+    *square = createBaseSquare(colors[amountTriangles]);
+    *parallelogram = createBaseParallelogram(colors[amountTriangles + 1]);
 
     triangles[0].scale(glm::vec3(1.5f, 1.5f, 1.0f));
     triangles[0].rotate(-135, glm::vec3(0.0f, 0.0f, 1.0f));

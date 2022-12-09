@@ -46,6 +46,15 @@ void Entity::drawScene(GLint MatrixId) {
 // Mesh
 
 void Mesh::createBufferObjects(const GLuint POSITION, const GLuint COLOR) {
+    
+    for (int i = 0; i < verticesSize / sizeof(Vertex); i++) {
+        vertices[i].RGBA[0] = color[0];
+        vertices[i].RGBA[1] = color[1];
+        vertices[i].RGBA[2] = color[2];
+        vertices[i].RGBA[3] = color[3];
+    }
+    
+
     glGenVertexArrays(1, &VaoId);
     glBindVertexArray(VaoId);
     {

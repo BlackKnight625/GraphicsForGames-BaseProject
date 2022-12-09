@@ -16,17 +16,22 @@ typedef struct {
 class Mesh {
 private:
 	GLuint VaoId, VboId[2];
-	const Vertex* vertices;
+	Vertex* vertices;
 	int verticesSize;
 	const GLubyte* indices;
 	int indicesSize;
+	GLfloat color[4];
 
 public:
-	Mesh(const Vertex* Vertices, const GLubyte* Indices, const int VerticesSize, const int IndicesSize) {
+	Mesh(Vertex* Vertices, const GLubyte* Indices, const int VerticesSize, const int IndicesSize, glm::vec4 Color) {
 		vertices = Vertices;
 		indices = Indices;
 		verticesSize = VerticesSize;
 		indicesSize = IndicesSize;
+		
+		for (int i = 0; i < 4; i++) {
+			color[i] = Color[i];
+		}
 	}
 
 	Mesh() {}
@@ -61,10 +66,12 @@ private:
 	Mesh mesh;
 
 public:
-	Entity(const Vertex* Vertices, const GLubyte* Indices, const int VerticesSize, const int IndicesSize, mgl::ShaderProgram* ShaderProgram) {
+	Entity(Vertex* Vertices, const GLubyte* Indices, const int VerticesSize, const int IndicesSize, 
+		mgl::ShaderProgram* ShaderProgram, glm::vec4 Color) {
+
 		model = glm::mat4(1.0f);
 		shaders = EntityShaders(ShaderProgram);
-		mesh = Mesh(Vertices, Indices, VerticesSize, IndicesSize);
+		mesh = Mesh(Vertices, Indices, VerticesSize, IndicesSize, Color);
 	}
 
 	Entity() {}
