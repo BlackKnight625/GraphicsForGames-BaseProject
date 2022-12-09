@@ -67,6 +67,9 @@ public:
   void drawCrab();
   void destroyCrab();
   void createCrabBuffer();
+  inline Entity createBaseTriangle();
+  inline Entity createBaseSquare();
+  inline Entity createBaseParallelogram();
 
 private:
   const GLuint POSITION = 0, COLOR = 1;
@@ -85,22 +88,16 @@ Crab crab;
 
 //////////////////////////////////////////////////////////////////////// SHADERs
 
-
-
-Entity triangle(Vertices, Indices, sizeof(Vertices), sizeof(Indices));
-Entity square(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare));
-Entity parallelogram(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram));
-
-inline Entity createBaseTriangle() {
-    return Entity(Vertices, Indices, sizeof(Vertices), sizeof(Indices));
+inline Entity MyApp::createBaseTriangle() {
+    return Entity(Vertices, Indices, sizeof(Vertices), sizeof(Indices), Shaders);
 }
 
-inline Entity createBaseSquare() {
-    return Entity(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare));
+inline Entity MyApp::createBaseSquare() {
+    return Entity(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare), Shaders);
 }
 
-inline Entity createBaseParallelogram() {
-    return Entity(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram));
+inline Entity MyApp::createBaseParallelogram() {
+    return Entity(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram), Shaders);
 }
 
 void MyApp::createCrab() {
@@ -160,28 +157,17 @@ void MyApp::createShaderProgram() {
 
 ////////////////////////////////////////////////////////////////////////// SCENE
 
-const glm::mat4 R6 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M6 = glm::translate(glm::vec3(0.15f, 0.0f, 0.0f)) * R6;
-
-const glm::mat4 R7 = glm::rotate(glm::radians(-45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M7 = glm::translate(glm::vec3(-0.2f, 0.35f, 0.0f)) * R7;
-
-const glm::mat4 R8 = glm::rotate(glm::radians(-135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M8 = glm::translate(glm::vec3(0.5f, 0.35f, 0.0f)) * R8;
-
-const glm::mat4 R9 = glm::rotate(glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M9 = glm::translate(glm::vec3(0.5f, 0.0f, 0.0f)) * R9;
 
 ////////////////////////////////////////////////////////////////////// CALLBACKS
 
 void MyApp::createCrabBuffer() {
     for (int i = 0; i < crabAmountEntities; i++) {
         crab.entities[i].createBufferObjects(POSITION, COLOR);
-        createShaderProgram();
     }
 }
 
 void MyApp::initCallback(GLFWwindow *win) {
+    createShaderProgram();
     createCrab();
     createCrabBuffer();
 }
@@ -202,7 +188,7 @@ void MyApp::windowSizeCallback(GLFWwindow *win, int winx, int winy) {
 
 void MyApp::drawCrab() {
     for (int i = 0; i < crabAmountEntities; i++) {
-        crab.entities[i].drawScene(Shaders, MatrixId);
+        crab.entities[i].drawScene(MatrixId);
     }
 }
 

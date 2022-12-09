@@ -13,36 +13,6 @@ typedef struct {
 	GLfloat RGBA[4];
 } Vertex;
 
-class Entity
-{
-private:
-	GLuint VaoId, VboId[2];
-	const Vertex *vertices;
-	int verticesSize;
-	const GLubyte *indices;
-	int indicesSize;
-	glm::mat4 model;
-
-public:
-	Entity(const Vertex* Vertices, const GLubyte* Indices, const int VerticesSize, const int IndicesSize) {
-		vertices = Vertices;
-		indices = Indices;
-		verticesSize = VerticesSize;
-		indicesSize = IndicesSize;
-
-		model = glm::mat4(1.0f);
-	}
-
-	Entity() {}
-
-	void createBufferObjects(const GLuint POSITION, const GLuint COLOR);
-    void destroyBufferObjects(const GLuint POSITION, const GLuint COLOR);
-	void drawScene(mgl::ShaderProgram *Shaders, GLint MatrixId);
-	void translate(glm::vec3 translation);
-	void rotate(float angle, glm::vec3 rotationAxis);
-	void scale(glm::vec3 scale);
-};
-
 class Mesh {
 private:
 	GLuint VaoId, VboId[2];
@@ -61,23 +31,50 @@ public:
 
 	Mesh() {}
 
+	void createBufferObjects(const GLuint POSITION, const GLuint COLOR);
+	void destroyBufferObjects(const GLuint POSITION, const GLuint COLOR);
 	void bind();
 	void unbind();
+	void draw();
 };
 
-class Shaders {
+class EntityShaders {
 private:
 	mgl::ShaderProgram* shaderProgram;
 
 public:
-	Shaders(mgl::ShaderProgram* ShaderProgram) {
+	EntityShaders(mgl::ShaderProgram* ShaderProgram) {
 		shaderProgram = ShaderProgram;
 	}
 
-	Shaders() {}
+	EntityShaders() {}
 
 	void bind();
 	void unbind();
+};
+
+class Entity
+{
+private:
+	glm::mat4 model;
+	EntityShaders shaders;
+	Mesh mesh;
+
+public:
+	Entity(const Vertex* Vertices, const GLubyte* Indices, const int VerticesSize, const int IndicesSize, mgl::ShaderProgram* ShaderProgram) {
+		model = glm::mat4(1.0f);
+		shaders = EntityShaders(ShaderProgram);
+		mesh = Mesh(Vertices, Indices, VerticesSize, IndicesSize);
+	}
+
+	Entity() {}
+
+	void createBufferObjects(const GLuint POSITION, const GLuint COLOR);
+    void destroyBufferObjects(const GLuint POSITION, const GLuint COLOR);
+	void drawScene(GLint MatrixId);
+	void translate(glm::vec3 translation);
+	void rotate(float angle, glm::vec3 rotationAxis);
+	void scale(glm::vec3 scale);
 };
 
 #endif

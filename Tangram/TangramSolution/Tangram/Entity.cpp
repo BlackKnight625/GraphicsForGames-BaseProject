@@ -9,6 +9,43 @@
 #include "mgl/mgl.hpp"
 
 void Entity::createBufferObjects(const GLuint POSITION, const GLuint COLOR) {
+    mesh.createBufferObjects(POSITION, COLOR);
+}
+
+void Entity::destroyBufferObjects(const GLuint POSITION, const GLuint COLOR) {
+    mesh.destroyBufferObjects(POSITION, COLOR);
+}
+
+void Entity::translate(glm::vec3 translation) {
+    model = glm::translate(translation) * model;
+}
+
+void Entity::rotate(float degrees, glm::vec3 rotationAxis) {
+    model = glm::rotate(glm::radians(degrees), rotationAxis) * model;
+}
+
+void Entity::scale(glm::vec3 scale) {
+    model = glm::scale(scale) * model;
+}
+
+
+void Entity::drawScene(GLint MatrixId) {
+    // Drawing directly in clip space
+
+    mesh.bind();
+    shaders.bind();
+
+    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(model));
+    mesh.draw();
+
+    shaders.unbind();
+    mesh.unbind();
+}
+
+
+// Mesh
+
+void Mesh::createBufferObjects(const GLuint POSITION, const GLuint COLOR) {
     glGenVertexArrays(1, &VaoId);
     glBindVertexArray(VaoId);
     {
@@ -36,7 +73,7 @@ void Entity::createBufferObjects(const GLuint POSITION, const GLuint COLOR) {
     glDeleteBuffers(2, VboId);
 }
 
-void Entity::destroyBufferObjects(const GLuint POSITION, const GLuint COLOR) {
+void Mesh::destroyBufferObjects(const GLuint POSITION, const GLuint COLOR) {
     glBindVertexArray(VaoId);
     glDisableVertexAttribArray(POSITION);
     glDisableVertexAttribArray(COLOR);
@@ -44,60 +81,24 @@ void Entity::destroyBufferObjects(const GLuint POSITION, const GLuint COLOR) {
     glBindVertexArray(0);
 }
 
-const glm::mat4 R1 = glm::rotate(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M1 = glm::translate(glm::vec3(-0.5f, 0.0f, 0.0f)) * R1;
-
-const glm::mat4 S1 = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 1.0f));
-const glm::mat4 R2 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f)) * S1;
-const glm::mat4 M2 = glm::translate(glm::vec3(0.2f, -0.4f, 0.0f)) * R2;
-
-const glm::mat4 R3 = glm::rotate(glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M3 = glm::translate(glm::vec3(-0.5f, -0.75f, 0.0f)) * R3;
-
-const glm::mat4 S2 = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 1.0f));
-const glm::mat4 R4 = glm::rotate(glm::radians(-45.0f), glm::vec3(0.0f, 0.0f, 1.0f)) * S2;
-const glm::mat4 M4 = glm::translate(glm::vec3(-0.2f, 0.0f, 0.0f)) * R4;
-
-const glm::mat4 R5 = glm::rotate(glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 M5 = glm::translate(glm::vec3(0.85f, 0.35f, 0.0f)) * R5;
-
-void Entity::translate(glm::vec3 translation) {
-    model = glm::translate(translation) * model;
-}
-
-void Entity::rotate(float degrees, glm::vec3 rotationAxis) {
-    model = glm::rotate(glm::radians(degrees), rotationAxis) * model;
-}
-
-void Entity::scale(glm::vec3 scale) {
-    model = glm::scale(scale) * model;
-}
-
-
-void Entity::drawScene(mgl::ShaderProgram *Shaders, GLint MatrixId) {
-    // Drawing directly in clip space
-
+void Mesh::bind() {
     glBindVertexArray(VaoId);
-    Shaders->bind();
+}
 
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(model));
-    glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_BYTE, (GLvoid*)0);
-
-    Shaders->unbind();
+void Mesh::unbind() {
     glBindVertexArray(0);
 }
 
-
-// Mesh
-
-
+void Mesh::draw() {
+    glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_BYTE, (GLvoid*)0);
+}
 
 // Shader
 
-void Shaders::bind() {
+void EntityShaders::bind() {
     shaderProgram->bind();
 }
 
-void Shaders::unbind() {
+void EntityShaders::unbind() {
     shaderProgram->unbind();
 }
