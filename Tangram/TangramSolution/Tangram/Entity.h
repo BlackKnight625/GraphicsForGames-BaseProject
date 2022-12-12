@@ -64,10 +64,13 @@ private:
 	glm::mat4 model;
 	EntityShaders shaders;
 	Mesh mesh;
+	GLint matrixId;
 
 public:
 	Entity(Vertex* Vertices, const GLubyte* Indices, const int VerticesSize, const int IndicesSize, 
-		mgl::ShaderProgram* ShaderProgram, glm::vec4 Color) {
+		mgl::ShaderProgram* ShaderProgram, glm::vec4 Color, GLint MatrixId) {
+
+		matrixId = MatrixId;
 
 		model = glm::mat4(1.0f);
 		shaders = EntityShaders(ShaderProgram);
@@ -78,7 +81,7 @@ public:
 
 	void createBufferObjects(const GLuint POSITION, const GLuint COLOR);
     void destroyBufferObjects(const GLuint POSITION, const GLuint COLOR);
-	void drawScene(GLint MatrixId);
+	void drawScene();
 	void translate(glm::vec3 translation);
 	void rotate(float angle, glm::vec3 rotationAxis);
 	void scale(glm::vec3 scale);

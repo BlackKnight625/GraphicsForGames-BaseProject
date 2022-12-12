@@ -29,13 +29,13 @@ void Entity::scale(glm::vec3 scale) {
 }
 
 
-void Entity::drawScene(GLint MatrixId) {
+void Entity::drawScene() {
     // Drawing directly in clip space
 
     mesh.bind();
     shaders.bind();
 
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(matrixId, 1, GL_FALSE, glm::value_ptr(model));
     mesh.draw();
 
     shaders.unbind();

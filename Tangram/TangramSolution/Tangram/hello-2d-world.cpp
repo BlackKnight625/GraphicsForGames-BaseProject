@@ -89,15 +89,15 @@ Crab crab;
 //////////////////////////////////////////////////////////////////////// SHADERs
 
 inline Entity MyApp::createBaseTriangle(glm::vec4 color) {
-    return Entity(Vertices, Indices, sizeof(Vertices), sizeof(Indices), Shaders, color);
+    return Entity(Vertices, Indices, sizeof(Vertices), sizeof(Indices), Shaders, color, MatrixId);
 }
 
 inline Entity MyApp::createBaseSquare(glm::vec4 color) {
-    return Entity(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare), Shaders, color);
+    return Entity(VerticesSquare, IndicesSquare, sizeof(VerticesSquare), sizeof(IndicesSquare), Shaders, color, MatrixId);
 }
 
 inline Entity MyApp::createBaseParallelogram(glm::vec4 color) {
-    return Entity(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram), Shaders, color);
+    return Entity(VerticesParallelogram, IndicesParallelogram, sizeof(VerticesParallelogram), sizeof(IndicesParallelogram), Shaders, color, MatrixId);
 }
 
 void MyApp::createCrab() {
@@ -203,7 +203,7 @@ void MyApp::windowSizeCallback(GLFWwindow *win, int winx, int winy) {
 
 void MyApp::drawCrab() {
     for (int i = 0; i < crabAmountEntities; i++) {
-        crab.entities[i].drawScene(MatrixId);
+        crab.entities[i].drawScene();
     }
 }
 
