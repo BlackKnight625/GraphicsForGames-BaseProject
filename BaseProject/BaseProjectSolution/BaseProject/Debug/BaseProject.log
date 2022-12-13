@@ -1,0 +1,11 @@
+﻿  hello-3d-world.cpp
+C:\Users\JoaoM\Desktop\Faculdade\Mestrado\Ano2\Parte2\CGJ\BaseProject\GraphicsForGames-BaseProject\BaseProject\BaseProjectSolution\BaseProject\hello-3d-world.cpp(15,10): fatal error C1083: Não é possível abrir arquivo incluir: 'GL/glew.h': No such file or directory
+  mglApp.cpp
+C:\Users\JoaoM\Desktop\Faculdade\Mestrado\Ano2\Parte2\CGJ\BaseProject\GraphicsForGames-BaseProject\BaseProject\BaseProjectSolution\BaseProject\mgl\mglApp.hpp(12,10): fatal error C1083: Não é possível abrir arquivo incluir: 'GL/glew.h': No such file or directory
+  mglCamera.cpp
+C:\Users\JoaoM\Desktop\Faculdade\Mestrado\Ano2\Parte2\CGJ\BaseProject\GraphicsForGames-BaseProject\BaseProject\BaseProjectSolution\BaseProject\mgl\mglCamera.cpp(1,10): fatal error C1083: Não é possível abrir arquivo incluir: 'glm/gtc/type_ptr.hpp': No such file or directory
+  mglError.cpp
+C:\Users\JoaoM\Desktop\Faculdade\Mestrado\Ano2\Parte2\CGJ\BaseProject\GraphicsForGames-BaseProject\BaseProject\BaseProjectSolution\BaseProject\mgl\mglError.cpp(1,10): fatal error C1083: Não é possível abrir arquivo incluir: 'GL/glew.h': No such file or directory
+  mglShader.cpp
+C:\Users\JoaoM\Desktop\Faculdade\Mestrado\Ano2\Parte2\CGJ\BaseProject\GraphicsForGames-BaseProject\BaseProject\BaseProjectSolution\BaseProject\mgl\mglShader.hpp(16,10): fatal error C1083: Não é possível abrir arquivo incluir: 'GL/glew.h': No such file or directory
+  Gerando Código...
