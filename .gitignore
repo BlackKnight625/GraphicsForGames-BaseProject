@@ -46,3 +46,6 @@ Tangram/TangramSolution/.vs/TangramSolution/FileContentIndex/c348dddd-5064-4e5e-
 Tangram/TangramSolution/.vs/TangramSolution/FileContentIndex/read.lock
 Tangram/TangramSolution/build/Debug/Tangram.pdb
 *.vsidx
+
+/BaseProject/BaseProjectSolution/BaseProject/intermediate/
+BaseProject/BaseProjectSolution/.vs/BaseProjectSolution/FileContentIndex/read.lock
