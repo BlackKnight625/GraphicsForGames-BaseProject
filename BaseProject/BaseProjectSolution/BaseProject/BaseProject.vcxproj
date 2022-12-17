@@ -154,12 +154,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hello-3d-world.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="mgl\mglApp.cpp" />
     <ClCompile Include="mgl\mglCamera.cpp" />
     <ClCompile Include="mgl\mglError.cpp" />
     <ClCompile Include="mgl\mglShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="mgl\mgl.hpp" />
     <ClInclude Include="mgl\mglApp.hpp" />
     <ClInclude Include="mgl\mglCamera.hpp" />
