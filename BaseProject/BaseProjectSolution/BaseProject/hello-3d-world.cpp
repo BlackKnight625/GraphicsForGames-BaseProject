@@ -20,6 +20,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include "mgl/mgl.hpp"
+#include "mgl/MeshManager.hpp"
 
 ////////////////////////////////////////////////////////////////////////// MYAPP
 

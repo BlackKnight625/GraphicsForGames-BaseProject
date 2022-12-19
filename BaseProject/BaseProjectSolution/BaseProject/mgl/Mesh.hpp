@@ -50,7 +50,6 @@ namespace mgl {
         void generateNormals();
         void generateSmoothNormals();
         void generateTexcoords();
-        void calculateTangentSpace();
         void flipUVs();
 
         void create(const std::string& filename);
@@ -58,12 +57,11 @@ namespace mgl {
 
         bool hasNormals();
         bool hasTexcoords();
-        bool hasTangentsAndBitangents();
 
     private:
         GLuint VaoId;
         unsigned int AssimpFlags;
-        bool NormalsLoaded, TexcoordsLoaded, TangentsAndBitangentsLoaded;
+        bool NormalsLoaded, TexcoordsLoaded;
 
         struct MeshData {
             unsigned int nIndices = 0;
