@@ -120,13 +120,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\assimp\lib\Debug;$(SolutionDir)dependencies\glfw\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\glfw\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\assimp\lib\Debug;$(SolutionDir)dependencies\glm;$(SolutionDir)dependencies\glew\lib\Release\x64;$(SolutionDir)dependencies\glfw\lib-vc2019</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\glm;$(SolutionDir)dependencies\glew\lib\Release\x64;$(SolutionDir)dependencies\glfw\lib-vc2019</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -154,7 +154,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hello-3d-world.cpp" />
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="mgl\Crab.cpp" />
+    <ClCompile Include="mgl\Entity.cpp" />
     <ClCompile Include="mgl\Mesh.cpp" />
     <ClCompile Include="mgl\MeshManager.cpp" />
     <ClCompile Include="mgl\mglApp.cpp" />
@@ -163,7 +164,8 @@
     <ClCompile Include="mgl\mglShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Mesh.hpp" />
+    <ClInclude Include="mgl\Crab.hpp" />
+    <ClInclude Include="mgl\Entity.hpp" />
     <ClInclude Include="mgl\Mesh.hpp" />
     <ClInclude Include="mgl\MeshManager.hpp" />
     <ClInclude Include="mgl\mgl.hpp" />

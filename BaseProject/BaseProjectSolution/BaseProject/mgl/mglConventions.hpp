@@ -28,6 +28,7 @@ const std::string TEXCOORD_ATTRIBUTE = "inTexcoord";
 const std::string TANGENT_ATTRIBUTE = "inTangent";
 const std::string BITANGENT_ATTRIBUTE = "inBitangent";
 const std::string COLOR_ATTRIBUTE = "inColor";
+const std::string ACTUAL_COLOR_ATTRIBUTE = "actualColor";
 
 ////////////////////////////////////////////////////////////////////////////////
 } // namespace mgl

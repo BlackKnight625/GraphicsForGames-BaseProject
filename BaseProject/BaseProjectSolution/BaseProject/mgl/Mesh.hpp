@@ -20,20 +20,16 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
+#include "mglShader.hpp"
+#include "mglConventions.hpp"
+
 namespace mgl {
 
     class Mesh;
 
-    ////////////////////////////////////////////////////////////////////// IDrawable
-
-    class IDrawable {
-    public:
-        virtual void draw(void) = 0;
-    };
-
     /////////////////////////////////////////////////////////////////////////// Mesh
 
-    class Mesh : public IDrawable {
+    class Mesh {
 
     public:
         static const GLuint INDEX = 0;
@@ -41,6 +37,7 @@ namespace mgl {
         static const GLuint NORMAL = 2;
         static const GLuint TEXCOORD = 3;
         static const GLuint TANGENT = 4;
+        static const GLuint UBO_BP = 0;
 
         explicit Mesh();
         ~Mesh();
@@ -52,16 +49,20 @@ namespace mgl {
         void generateTexcoords();
         void flipUVs();
 
-        void create(const std::string& filename);
-        void draw() override;
+        void create(mgl::ShaderProgram **shaderProgram, const std::string& filename);
+        void draw(glm::vec4 actualColor, glm::mat4 modelMatrix);
 
         bool hasNormals();
         bool hasTexcoords();
+
+        void createBufferObjects();
+        void destroyBufferObjects();
 
     private:
         GLuint VaoId;
         unsigned int AssimpFlags;
         bool NormalsLoaded, TexcoordsLoaded;
+        mgl::ShaderProgram** ShaderProgram;
 
         struct MeshData {
             unsigned int nIndices = 0;
@@ -77,8 +78,6 @@ namespace mgl {
 
         void processScene(const aiScene* scene);
         void processMesh(const aiMesh* mesh);
-        void createBufferObjects();
-        void destroyBufferObjects();
     };
 
     ////////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,9 @@
 #include "Mesh.hpp"
 
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/ext.hpp>  
+#include <glm/gtx/string_cast.hpp>
+
 namespace mgl {
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +93,9 @@ namespace mgl {
 #endif
     }
 
-    void Mesh::create(const std::string& filename) {
+    void Mesh::create(mgl::ShaderProgram** shaderProgram, const std::string& filename) {
+        ShaderProgram = shaderProgram;
+
         Assimp::Importer importer;
         const aiScene* scene = importer.ReadFile(filename, AssimpFlags);
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
@@ -108,12 +114,12 @@ namespace mgl {
     }
 
     void Mesh::createBufferObjects() {
-        GLuint boId[5];
+        GLuint boId[4];
 
         glGenVertexArrays(1, &VaoId);
         glBindVertexArray(VaoId);
         {
-            glGenBuffers(5, boId);
+            glGenBuffers(4, boId);
 
             glBindBuffer(GL_ARRAY_BUFFER, boId[POSITION]);
             glBufferData(GL_ARRAY_BUFFER, sizeof(Positions[0]) * Positions.size(),
@@ -143,7 +149,7 @@ namespace mgl {
         }
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glDeleteBuffers(5, boId);
+        glDeleteBuffers(4, boId);
     }
 
     void Mesh::destroyBufferObjects() {
@@ -155,14 +161,22 @@ namespace mgl {
         glBindVertexArray(0);
     }
 
-    void Mesh::draw() {
-        glBindVertexArray(VaoId);
-        for (MeshData& mesh : Meshes) {
-            glDrawElementsBaseVertex(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_INT,
-                (void*)(sizeof(unsigned int) * mesh.baseIndex),
-                mesh.baseVertex);
-        }
-        glBindVertexArray(0);
+    void Mesh::draw(glm::vec4 actualColor, glm::mat4 modelMatrix) {
+			(*ShaderProgram)->bind();
+			glUniform4f((*ShaderProgram)->Uniforms[ACTUAL_COLOR_ATTRIBUTE].index,
+                actualColor[0], actualColor[1], actualColor[2], actualColor[3]);
+            glUniformMatrix4fv((*ShaderProgram)->Uniforms[MODEL_MATRIX].index,
+                1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+	        glBindVertexArray(VaoId);
+	        for (MeshData& mesh : Meshes) {
+	            glDrawElementsBaseVertex(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_INT,
+	                (void*)(sizeof(unsigned int) * mesh.baseIndex),
+	                mesh.baseVertex);
+	        }
+	        glBindVertexArray(0);
+
+            (*ShaderProgram)->unbind();
     }
 
     ////////////////////////////////////////////////////////////////////////////////

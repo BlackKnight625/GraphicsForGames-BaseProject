@@ -99,6 +99,7 @@ void ShaderProgram::create() {
   }
 
   for (auto &i : Uniforms) {
+      std::cerr << "INFO: Uniform " << i.first << " about to be bound." << std::endl;
     i.second.index = glGetUniformLocation(ProgramId, i.first.c_str());
     if (i.second.index < 0)
       std::cerr << "WARNING: Uniform " << i.first << " not found." << std::endl;

@@ -10,9 +10,30 @@ namespace mgl {
 		Mesh squareMesh;
 		Mesh parallelogramMesh;
 	public:
-		MeshManager();
+		MeshManager() = default;
 
-		void createCrabMesh(const std::string& triangleFilename, const std::string& squareFilename, const std::string& parallelogramFilename);
+		void createCrabMesh(ShaderProgram** shaderProgram, const std::string& triangleFilename,
+			const std::string& squareFilename, const std::string& parallelogramFilename)
+		{
+			triangleMesh.create(shaderProgram, triangleFilename);
+			squareMesh.create(shaderProgram, squareFilename);
+			parallelogramMesh.create(shaderProgram, parallelogramFilename);
+		}
+
+		Mesh* getTriangleMesh() {
+			return &triangleMesh;
+		}
+
+		Mesh* getSquareMesh() {
+			return &squareMesh;
+		}
+
+		Mesh* getParallelogramMesh() {
+			return &parallelogramMesh;
+		}
+
+		void createBufferObjects();
+		void destroyBufferObjects();
 	};
 }
 

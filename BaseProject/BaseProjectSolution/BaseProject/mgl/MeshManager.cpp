@@ -1,15 +1,17 @@
 ﻿#include "MeshManager.hpp"
 
 namespace mgl {
-	MeshManager::MeshManager() {
-		
+	void MeshManager::createBufferObjects() {
+		triangleMesh.createBufferObjects();
+		squareMesh.createBufferObjects();
+		parallelogramMesh.createBufferObjects();
 	}
 
-
-	void MeshManager::createCrabMesh(const std::string& triangleFilename, const std::string& squareFilename, const std::string& parallelogramFilename) {
-		triangleMesh.create(triangleFilename);
-		squareMesh.create(squareFilename);
-		parallelogramMesh.create(parallelogramFilename);
+	void MeshManager::destroyBufferObjects() {
+		triangleMesh.destroyBufferObjects();
+		squareMesh.destroyBufferObjects();
+		parallelogramMesh.destroyBufferObjects();
 	}
+
 
 }
