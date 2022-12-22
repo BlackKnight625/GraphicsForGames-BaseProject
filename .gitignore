@@ -49,3 +49,7 @@ Tangram/TangramSolution/build/Debug/Tangram.pdb
 /BaseProject/BaseProjectSolution/BaseProject/intermediate/
 BaseProject/BaseProjectSolution/.vs/BaseProjectSolution/FileContentIndex/read.lock
 BaseProject/BaseProjectSolution/dependencies/assimp/
+
+/ShaderProjectJoao/ShaderProjectJoaoSolution/ShaderProjectJoao/intermediate/
+ShaderProjectJoao/ShaderProjectJoaoSolution/.vs/ShaderProjectJoaoSolution/FileContentIndex/read.lock
+ShaderProjectJoao/ShaderProjectJoaoSolution/dependencies/assimp/
