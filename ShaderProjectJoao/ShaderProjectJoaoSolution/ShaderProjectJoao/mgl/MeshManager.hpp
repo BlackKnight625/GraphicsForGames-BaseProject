@@ -6,30 +6,24 @@
 namespace mgl {
 	class MeshManager {
 	private:
-		Mesh triangleMesh;
-		Mesh squareMesh;
-		Mesh parallelogramMesh;
+		Mesh sphereMesh;
+		Mesh cubeMesh;
 	public:
 		MeshManager() = default;
 
-		void createCrabMesh(ShaderProgram** shaderProgram, const std::string& triangleFilename,
-			const std::string& squareFilename, const std::string& parallelogramFilename)
+		void createSphereAndCubeMesh(ShaderProgram** shaderProgram, const std::string& sphereFilename,
+			const std::string& cubeFilename)
 		{
-			triangleMesh.create(shaderProgram, triangleFilename);
-			squareMesh.create(shaderProgram, squareFilename);
-			parallelogramMesh.create(shaderProgram, parallelogramFilename);
+			sphereMesh.create(shaderProgram, sphereFilename);
+			cubeMesh.create(shaderProgram, cubeFilename);
 		}
 
-		Mesh* getTriangleMesh() {
-			return &triangleMesh;
+		Mesh* getSphereMesh() {
+			return &sphereMesh;
 		}
 
-		Mesh* getSquareMesh() {
-			return &squareMesh;
-		}
-
-		Mesh* getParallelogramMesh() {
-			return &parallelogramMesh;
+		Mesh* getCubeMesh() {
+			return &cubeMesh;
 		}
 
 		void createBufferObjects();

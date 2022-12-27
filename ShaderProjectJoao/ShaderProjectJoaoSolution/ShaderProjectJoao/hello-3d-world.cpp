@@ -10,6 +10,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <iomanip>
+#include <string>
 #include <iostream>
 
 #include <GL/glew.h>
@@ -22,7 +24,8 @@
 #include "mgl/mgl.hpp"
 #include "mgl/MeshManager.hpp"
 #include "mgl/Mesh.hpp"
-#include "mgl/Crab.hpp"
+#include "mgl/Cube.hpp"
+#include "mgl/Sphere.hpp"
 
 ////////////////////////////////////////////////////////////////////////// MYAPP
 
@@ -34,20 +37,23 @@ private:
 	mgl::ShaderProgram *Shaders = nullptr;
 	mgl::Camera *Camera = nullptr;
 	mgl::MeshManager *MeshManager = nullptr;
-    mgl::Crab crab = mgl::Crab();
+    mgl::Cube cube = mgl::Cube();
+    mgl::Sphere sphere = mgl::Sphere();
 
 	void createMeshManager();
 	void createShaderProgram();
 	void createBufferObjects();
 	void destroyBufferObjects();
 	void drawScene();
-    void createCrab();
+    void createCube();
+    void createSphere();
 
 public:
     void initCallback(GLFWwindow* win) override;
     void displayCallback(GLFWwindow* win, double elapsed) override;
     void windowCloseCallback(GLFWwindow* win) override;
     void windowSizeCallback(GLFWwindow* win, int width, int height) override;
+    void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
 
     virtual ~MyApp() {
         delete Shaders;
@@ -69,10 +75,10 @@ void MyApp::createShaderProgram() {
   Shaders->addUniformBlock(mgl::CAMERA_BLOCK, mgl::Mesh::UBO_BP);
   Shaders->addUniform(mgl::ACTUAL_COLOR_ATTRIBUTE);
 
-  if (MeshManager->getTriangleMesh()->hasNormals()) {
+  if (MeshManager->getSphereMesh()->hasNormals()) {
       Shaders->addAttribute(mgl::NORMAL_ATTRIBUTE, mgl::Mesh::NORMAL);
   }
-  if (MeshManager->getTriangleMesh()->hasTexcoords()) {
+  if (MeshManager->getSphereMesh()->hasTexcoords()) {
       Shaders->addAttribute(mgl::TEXCOORD_ATTRIBUTE, mgl::Mesh::TEXCOORD);
   }
 
@@ -82,9 +88,8 @@ void MyApp::createShaderProgram() {
 void MyApp::createMeshManager() {
     MeshManager = new mgl::MeshManager();
 
-    MeshManager->createCrabMesh(&Shaders, "../assets/models/Triangle.obj", 
-"../assets/models/Square.obj", 
-"../assets/models/Parallelogram.obj");
+    MeshManager->createSphereAndCubeMesh(&Shaders, "../assets/models/Sphere.obj", 
+"../assets/models/Cube.obj");
 }
 
 
@@ -93,8 +98,12 @@ void MyApp::createBufferObjects() {
 	Camera = new mgl::Camera(mgl::Mesh::UBO_BP);
 }
 
-void MyApp::createCrab() {
-    crab.createCrab(MeshManager);
+void MyApp::createCube() {
+    cube.createCube(MeshManager);
+}
+
+void MyApp::createSphere() {
+    sphere.createSphere(MeshManager);
 }
 
 
@@ -130,7 +139,8 @@ void MyApp::drawScene() {
   Camera->setViewMatrix(ViewMatrix1);
   Camera->setProjectionMatrix(ProjectionMatrix2);
 
-  crab.draw();
+  cube.draw();
+  sphere.draw();
 }
 
 ////////////////////////////////////////////////////////////////////// CALLBACKS
@@ -139,7 +149,8 @@ void MyApp::initCallback(GLFWwindow *win) {
     createMeshManager();
     createBufferObjects();
     createShaderProgram();
-    createCrab();
+    createCube();
+    createSphere();
 }
 
 void MyApp::windowCloseCallback(GLFWwindow *win) { destroyBufferObjects(); }
@@ -149,6 +160,31 @@ void MyApp::windowSizeCallback(GLFWwindow *win, int winx, int winy) {
 }
 
 void MyApp::displayCallback(GLFWwindow *win, double elapsed) { drawScene(); }
+
+void MyApp::keyCallback(GLFWwindow* window, int key, int scancode,
+    int action, int mods) {
+
+}
+
+const int numberOfPixels = 800 * 600 * 3;
+void saveScreenshotToFile(std::string filename, int windowWidth, int windowHeight) {
+
+    unsigned char pixels[numberOfPixels];
+
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadBuffer(GL_FRONT);
+    glReadPixels(0, 0, windowWidth, windowHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, pixels);
+
+    FILE* outputFile;
+    fopen_s(&outputFile, filename.c_str(), "w");
+    short header[] = { 0, 2, 0, 0, 0, 0, (short)windowWidth, (short)windowHeight, 24 };
+
+    fwrite(&header, sizeof(header), 1, outputFile);
+    fwrite(pixels, numberOfPixels, 1, outputFile);
+    fclose(outputFile);
+
+    printf("Finish writing to file.\n");
+}
 
 /////////////////////////////////////////////////////////////////////////// MAIN
 
