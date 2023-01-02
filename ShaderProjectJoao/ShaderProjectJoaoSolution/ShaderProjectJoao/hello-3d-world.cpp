@@ -28,8 +28,11 @@
 #include "mgl/Sphere.hpp"
 #include <glm/gtx/quaternion.hpp>
 
+/**
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../stb/stb_image_write.h"
+#include "../stb/pngwriter.h"
+*/
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////// MYAPP
@@ -47,6 +50,14 @@ private:
     bool isPerspective = true;
     float lastX;
     float lastY;
+    float lastTranslationSphere;
+    float lastTranslationCube;
+    float lastRotationSphere;
+    float lastRotationCube;
+    float lastScaleSphereDown;
+    float lastScaleSphereUp;
+    float lastScaleCubeDown;
+    float lastScaleCubeUp;
     bool firstMouse = true;
     float yaw;
     float pitch;
@@ -175,24 +186,40 @@ void MyApp::displayCallback(GLFWwindow* win, double elapsed) { drawScene(); }
 
 const int numberOfPixels = 800 * 600 * 3;
 
-void saveScreenshotToFile(std::string filename, int windowWidth, int windowHeight) {
-
-    unsigned char pixels[numberOfPixels];
-
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glReadBuffer(GL_FRONT);
-    glReadPixels(0, 0, windowWidth, windowHeight, GL_BGR_EXT, GL_UNSIGNED_BYTE, pixels);
-
-    FILE* outputFile;
-    fopen_s(&outputFile, filename.c_str(), "w");
-    short header[] = { 0, 2, 0, 0, 0, 0, (short)windowWidth, (short)windowHeight, 24 };
-
-    fwrite(&header, sizeof(header), 1, outputFile);
-    fwrite(pixels, numberOfPixels, 1, outputFile);
-    fclose(outputFile);
-
-    printf("Finish writing to file.\n");
+/**
+void saveScreenshotToFile(const char * filename, int windowWidth, int windowHeight) {
+    GLfloat* pixels = new GLfloat[numberOfPixels];
+    glReadPixels(0.0, 0.0, windowWidth, windowHeight, GL_RGB, GL_FLOAT, pixels);
+    pngwriter PNG(windowWidth, windowHeight, 1.0, filename);
+    size_t x = 1;
+    size_t y = 1;
+    double R, G, B;
+    for (size_t i = 0; i < numberOfPixels; i++) // "i" is the index for array "pixels"
+    {
+        switch (i % 3)
+        {
+        case 2:
+            B = static_cast<double>(pixels[i]); break;
+        case 1:
+            G = static_cast<double>(pixels[i]); break;
+        case 0:
+            R = static_cast<double>(pixels[i]);
+            PNG.plot(x, y, R, G, B);     // set pixel to position (x, y)
+            if (x == windowWidth)             // Move to the next row of image
+            {
+                x = 1;
+                y++;
+            }
+            else                       // To the next pixel
+            {
+                x++;
+            }
+            break;
+        }
+    }
+    PNG.close();
 }
+*/
 
 void MyApp::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
@@ -260,7 +287,7 @@ void flipVertically(int width, int height, char* data)
         }
     }
 }
-
+/**
 int saveScreenshot(const char* filename)
 {
     GLint viewport[4];
@@ -287,7 +314,7 @@ int saveScreenshot(const char* filename)
 
     return saved;
 }
-
+*/
 const char* createScreenshotBasename()
 {
     static char basename[30];
@@ -298,6 +325,7 @@ const char* createScreenshotBasename()
     return basename;
 }
 
+/**
 int captureScreenshot()
 {
     char filename[50];
@@ -314,12 +342,13 @@ int captureScreenshot()
 
     return saved;
 }
+*/
 
 void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        //saveScreenshotToFile("screenshot.png", 800, 600);
-        captureScreenshot();
+        //saveScreenshotToFile("test.png", 800, 600);
+        //captureScreenshot();
     }
 
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
@@ -337,49 +366,103 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 
     if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        cout << "Cursor locked inside window" << endl;
     }
     else if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        cout << "Cursor unlocked" << endl;
     }
 
     // Sphere transformations
     if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
         sphere.translate(glm::vec3(-1.0f, 0.0f, 0.0f));
+        cout << "Translated sphere negatively in the x axis" << endl;
+        lastTranslationSphere += 1.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS) {
         sphere.translate(glm::vec3(1.0f, 0.0f, 0.0f));
+        cout << "Translated sphere positively in the x axis" << endl;
+        lastTranslationSphere -= 1.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS) {
         sphere.rotate(-15.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+        cout << "Rotated sphere negatively using the z axis" << endl;
+        lastRotationSphere += 15.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS) {
         sphere.rotate(15.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+        cout << "Rotated sphere positively using the z axis" << endl;
+        lastRotationSphere -= 15.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
         sphere.scale(glm::vec3(0.75f, 0.75f, 0.75f));
+        cout << "Scaled down sphere" << endl;
+        lastScaleSphereDown += 1.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS) {
-        sphere.translate(glm::vec3(1.0f, 1.0f, 1.0f));
+        sphere.scale(glm::vec3(1.25f, 1.25f, 1.25f));
+        cout << "Scaled up sphere" << endl;
+        lastScaleSphereUp += 1.0f;
     }
 
     // Cube transformations
     if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
         cube.translate(glm::vec3(-1.0f, 0.0f, 0.0f));
+        cout << "Translated cube negatively in the x axis" << endl;
+        lastTranslationCube += 1.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_V) == GLFW_PRESS) {
         cube.translate(glm::vec3(1.0f, 0.0f, 0.0f));
+        cout << "Translated cube positively in the x axis" << endl;
+        lastTranslationCube -= 1.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         cube.rotate(-15.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+        cout << "Rotated cube negatively using the z axis" << endl;
+        lastRotationCube += 15.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
         cube.rotate(15.0f, glm::vec3(0.0f, 0.0f, 1.0f));
+        cout << "Rotated cube positively using the z axis" << endl;
+        lastRotationCube -= 15.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
         cube.scale(glm::vec3(0.75f, 0.75f, 0.75f));
+        cout << "Scaled down cube" << endl;
+        lastScaleCubeDown += 1.0f;
     }
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-        cube.translate(glm::vec3(1.0f, 1.0f, 1.0f));
+        cube.scale(glm::vec3(1.25f, 1.25f, 1.25f));
+        cout << "Scaled up cube" << endl;
+        lastScaleCubeUp += 1.0f;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Q)) {
+        cube.translate(glm::vec3(lastTranslationCube, 0.0f, 0.0f));
+        cube.rotate(lastRotationCube, glm::vec3(0.0f, 0.0f, 1.0f));
+        sphere.translate(glm::vec3(lastTranslationSphere, 0.0f, 0.0f));
+        sphere.rotate(lastRotationSphere, glm::vec3(0.0f, 0.0f, 1.0f));
+        for (int i = 0; i < lastScaleCubeDown; i++) {
+            cube.scale(glm::vec3(1.25f, 1.25f, 1.25f));
+        }
+        for (int i = 0; i < lastScaleCubeUp; i++) {
+            cube.scale(glm::vec3(0.75f, 0.75f, 0.75f));
+        }
+        for (int i = 0; i < lastScaleSphereDown; i++) {
+            sphere.scale(glm::vec3(1.25f, 1.25f, 1.25f));
+        }
+        for (int i = 0; i < lastScaleSphereUp; i++) {
+            sphere.scale(glm::vec3(0.75f, 0.75f, 0.75f));
+        }
+        cout << "Reset the scene" << endl;
+        lastTranslationCube = 0.0f;
+        lastTranslationSphere = 0.0f;
+        lastRotationCube = 0.0f;
+        lastRotationSphere = 0.0f;
+        lastScaleSphereDown = 0.0f;
+        lastScaleSphereUp = 0.0f;
+        lastScaleCubeDown = 0.0f;
+        lastScaleCubeUp = 0.0f;
     }
 
     //Shaders->bind();
