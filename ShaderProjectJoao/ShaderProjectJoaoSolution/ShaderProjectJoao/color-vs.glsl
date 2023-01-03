@@ -15,7 +15,7 @@ in vec3 inNormal;
 out float exIntensity;
 out vec2 exPosition;
 
-const float SpecularContribution = 0.3;
+const float SpecularContribution = 0.4;
 const float DiffuseContribution = 1.0 - SpecularContribution;
 
 void main(void) {

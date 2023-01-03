@@ -105,10 +105,10 @@ void MyApp::createShaderProgram() {
   Shaders->addUniformBlock(mgl::CAMERA_BLOCK, mgl::Mesh::UBO_BP);
   
   Shaders->addUniform("LightPosition");
-  Shaders->addUniform("BrickColor");
+  Shaders->addUniform("MarbleColor");
   Shaders->addUniform("MortarColor");
-  Shaders->addUniform("BrickSize");
-  Shaders->addUniform("BrickPct");
+  Shaders->addUniform("MarbleSize");
+  Shaders->addUniform("MarblePct");
 
   Shaders->create();
 }
@@ -119,7 +119,6 @@ void MyApp::createMeshManager() {
     MeshManager->createSphereAndCubeMesh(&Shaders, "../assets/models/Sphere.obj", 
 "../assets/models/Cube.obj");
 }
-
 
 void MyApp::createBufferObjects() {
     MeshManager->createBufferObjects();
@@ -133,7 +132,6 @@ void MyApp::createCube() {
 void MyApp::createSphere() {
     sphere.createSphere(MeshManager);
 }
-
 
 void MyApp::destroyBufferObjects() {
     MeshManager->destroyBufferObjects();

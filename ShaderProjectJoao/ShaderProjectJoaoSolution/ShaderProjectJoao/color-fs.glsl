@@ -1,7 +1,7 @@
 #version 330 core
 
 uniform vec4 MarbleColor, MortarColor;
-uniform vec2 MarbleSize, BrickPct;
+uniform vec2 MarbleSize, MarblePct;
 
 in float exIntensity;
 in vec2 exPosition;
@@ -19,7 +19,7 @@ void main(void) {
   }
 
   position = fract(position);
-  use_marble = step(position, BrickPct);
+  use_marble = step(position, MarblePct);
 
   color = mix(MortarColor, MarbleColor, use_marble.x * use_marble.y);
   color *= exIntensity;
