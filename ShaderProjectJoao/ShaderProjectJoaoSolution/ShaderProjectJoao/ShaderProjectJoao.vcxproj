@@ -120,13 +120,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glut\include;$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glfw\include;$(SolutionDir)dependencies\stb;$(SolutionDir)dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\devil\include;$(SolutionDir)dependencies\glut\include;$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glfw\include;$(SolutionDir)dependencies\stb;$(SolutionDir)dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\glut\lib\Release\x64;$(SolutionDir)dependencies\glew\lib\Release\x64;$(SolutionDir)dependencies\assimp\lib\Release;$(SolutionDir)dependencies\glfw\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\devil\lib\x64\Release;$(SolutionDir)dependencies\glut\lib\Release\x64;$(SolutionDir)dependencies\glew\lib\Release\x64;$(SolutionDir)dependencies\assimp\lib\Release;$(SolutionDir)dependencies\glfw\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;assimp-vc143-mt.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -137,15 +137,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\glut\include;$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glfw\include;$(SolutionDir)dependencies\stb;$(SolutionDir)dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\devil\include;$(SolutionDir)dependencies\glut\include;$(SolutionDir)dependencies\assimp\include;$(SolutionDir)dependencies\glew\include;$(SolutionDir)dependencies\glfw\include;$(SolutionDir)dependencies\stb;$(SolutionDir)dependencies\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\glut\lib\Release\x64;$(SolutionDir)dependencies\glew\lib\Release\x64;$(SolutionDir)dependencies\assimp\lib\Release;$(SolutionDir)dependencies\glfw\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)dependencies\devil\lib\x64\Release;$(SolutionDir)dependencies\glut\lib\Release\x64;$(SolutionDir)dependencies\glew\lib\Release\x64;$(SolutionDir)dependencies\assimp\lib\Release;$(SolutionDir)dependencies\glfw\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32.lib;glfw3dll.lib;assimp-vc143-mt.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -176,6 +176,8 @@
   <ItemGroup>
     <None Include="color-fs.glsl" />
     <None Include="color-vs.glsl" />
+    <None Include="marblewithphong-fs.glsl" />
+    <None Include="marblewithphong-vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

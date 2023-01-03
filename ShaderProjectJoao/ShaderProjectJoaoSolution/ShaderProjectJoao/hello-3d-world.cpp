@@ -56,12 +56,24 @@ private:
     // Used to reset the scene
     float lastTranslationSphere;
     float lastTranslationCube;
+    float lastTranslationCubeX;
+    float lastTranslationCubeY;
+    float lastTranslationSphereX;
+    float lastTranslationSphereY;
     float lastRotationSphere;
+    float lastRotationSphereX;
+    float lastRotationSphereY;
     float lastRotationCube;
+    float lastRotationCubeX;
+    float lastRotationCubeY;
     float lastScaleSphereDown;
     float lastScaleSphereUp;
     float lastScaleCubeDown;
     float lastScaleCubeUp;
+    float lastScaleCubeDownMouse;
+    float lastScaleCubeUpMouse;
+    float lastScaleSphereDownMouse;
+    float lastScaleSphereUpMouse;
 
     // Buttons to change the Cube with mouse
     bool isPressingQ = false;
@@ -252,24 +264,64 @@ void MyApp::mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
     if (isPressingLeftMouseButton) {
         if (isPressingQ) {
-            cube.scale(glm::vec3((xpos - lastX)/5.0f, (ypos - lastY)/5.0f, 0.0f));
+            cout << (xpos - lastX) / 20.0f << endl;
+            float scale = xpos - lastX;
+            if (scale < 0) {
+                scale = 0.995;
+            }
+            else {
+                scale = 1.005;
+            }
+            cube.scale(glm::vec3(scale, scale, scale));
+            if (scale < 1) {
+                lastScaleCubeDownMouse += 1.0f;
+            }
+            else {
+                lastScaleCubeUpMouse += 1.0f;
+            }
+            
         }
         else if (isPressingA) {
-            cube.rotate(1 * xpos - lastX, glm::vec3(1.0f, 0.0f, 0.0f));
-            cube.rotate(1 * ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
+            cube.rotate(xpos - lastX, glm::vec3(1.0f, 0.0f, 0.0f));
+            cube.rotate(ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
+            lastRotationCubeX -= (xpos - lastX);
+            lastRotationCubeY -= (ypos - lastY);
+            cout << xpos - lastX << endl;
+            cout << lastRotationCubeX << endl;
         }
         else if (isPressingZ) {
-            cube.translate(glm::vec3(xpos - lastX, ypos - lastY, 0.0f));
-
+            cube.translate(glm::vec3((xpos - lastX) / 20.0f, (ypos - lastY) / 20.0f, 0.0f));
+            lastTranslationCubeX -= ((xpos - lastX) / 20.0f);
+            lastTranslationCubeY -= ((ypos - lastY) / 20.0f);
         }
         else if (isPressingW) {
-            //sphere.scale();
+            float scale = xpos - lastX;
+            if (scale < 0) {
+                scale = 0.995;
+            }
+            else {
+                scale = 1.005;
+            }
+            sphere.scale(glm::vec3(scale, scale, scale));
+            if (scale < 1) {
+                lastScaleSphereDownMouse += 1.0f;
+            }
+            else {
+                lastScaleSphereUpMouse += 1.0f;
+            }
         }
         else if (isPressingS) {
-            //sphere.rotate();
+            cout << xpos - lastX << endl;
+            cout << lastRotationSphereX << endl;
+            sphere.rotate(xpos - lastX, glm::vec3(1.0f, 0.0f, 0.0f));
+            sphere.rotate(ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
+            lastRotationSphereX -= (xpos - lastX);
+            lastRotationSphereY -= (ypos - lastY);
         }
         else if (isPressingX) {
-            //
+            sphere.translate(glm::vec3((xpos - lastX) / 20.0f, (ypos - lastY) / 20.0f, 0.0f));
+            lastTranslationSphereX -= ((xpos - lastX) / 20.0f);
+            lastTranslationSphereY -= ((ypos - lastY) / 20.0f);
         }
     }
 
@@ -371,20 +423,43 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 
     if (glfwGetKey(window, GLFW_KEY_K)) {
         cube.translate(glm::vec3(lastTranslationCube, 0.0f, 0.0f));
+        cube.translate(glm::vec3(lastTranslationCubeX, 0.0f, 0.0f));
+        cube.translate(glm::vec3(0.0f, lastTranslationCubeY, 0.0f));
         cube.rotate(lastRotationCube, glm::vec3(0.0f, 0.0f, 1.0f));
+        cube.rotate(lastRotationCubeX, glm::vec3(1.0f, 0.0f, 0.0f));
+        cube.rotate(lastRotationCubeY, glm::vec3(0.0f, 1.0f, 0.0f));
+
         sphere.translate(glm::vec3(lastTranslationSphere, 0.0f, 0.0f));
+        sphere.translate(glm::vec3(lastTranslationSphereX, 0.0f, 0.0f));
+        sphere.translate(glm::vec3(0.0f, lastTranslationSphereY, 0.0f));
         sphere.rotate(lastRotationSphere, glm::vec3(0.0f, 0.0f, 1.0f));
+        sphere.rotate(lastRotationSphereX, glm::vec3(1.0f, 0.0f, 0.0f));
+        sphere.rotate(lastRotationSphereY, glm::vec3(0.0f, 1.0f, 0.0f));
+
         for (int i = 0; i < lastScaleCubeDown; i++) {
             cube.scale(glm::vec3(1.25f, 1.25f, 1.25f));
         }
         for (int i = 0; i < lastScaleCubeUp; i++) {
             cube.scale(glm::vec3(0.75f, 0.75f, 0.75f));
         }
+        for (int i = 0; i < lastScaleCubeDownMouse; i++) {
+            cube.scale(glm::vec3(1.005f, 1.005f, 1.005f));
+        }
+        for (int i = 0; i < lastScaleCubeUpMouse; i++) {
+            cube.scale(glm::vec3(0.995f, 0.995f, 0.995f));
+        }
+
         for (int i = 0; i < lastScaleSphereDown; i++) {
             sphere.scale(glm::vec3(1.25f, 1.25f, 1.25f));
         }
         for (int i = 0; i < lastScaleSphereUp; i++) {
             sphere.scale(glm::vec3(0.75f, 0.75f, 0.75f));
+        }
+        for (int i = 0; i < lastScaleSphereDownMouse; i++) {
+            sphere.scale(glm::vec3(1.005f, 1.005f, 1.005f));
+        }
+        for (int i = 0; i < lastScaleSphereUpMouse; i++) {
+            sphere.scale(glm::vec3(0.995f, 0.995f, 0.995f));
         }
         cout << "Reset the scene" << endl;
         lastTranslationCube = 0.0f;
@@ -395,6 +470,16 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         lastScaleSphereUp = 0.0f;
         lastScaleCubeDown = 0.0f;
         lastScaleCubeUp = 0.0f;
+        lastTranslationSphere;
+        
+        lastTranslationCubeX = 0.0f;
+        lastTranslationCubeY = 0.0f;
+        lastTranslationSphereX = 0.0f;
+        lastTranslationSphereY = 0.0f;
+        lastRotationSphereX = 0.0f;
+        lastRotationSphereY = 0.0f;
+        lastRotationCubeX = 0.0f;
+        lastRotationCubeY = 0.0f;
     }
 
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {

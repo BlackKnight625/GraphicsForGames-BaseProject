@@ -7,8 +7,6 @@ in float exIntensity;
 in vec3 exPosition;
 out vec4 FragmentColor;
 
-#define Integral(x,p,notp) ((floor(x)*(p))+max(fract(x)-notp),0.0))
-
 void main(void) {
   vec4 color;
   vec3 position;

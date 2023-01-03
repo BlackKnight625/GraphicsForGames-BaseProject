@@ -84,5 +84,7 @@
   <ItemGroup>
     <None Include="color-fs.glsl" />
     <None Include="color-vs.glsl" />
+    <None Include="marblewithphong-fs.glsl" />
+    <None Include="marblewithphong-vs.glsl" />
   </ItemGroup>
 </Project>
