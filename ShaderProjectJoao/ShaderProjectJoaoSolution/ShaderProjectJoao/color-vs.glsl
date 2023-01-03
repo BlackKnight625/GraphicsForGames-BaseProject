@@ -13,7 +13,7 @@ uniform Camera {
 in vec3 inPosition;
 in vec3 inNormal;
 out float exIntensity;
-out vec2 exPosition;
+out vec3 exPosition;
 
 const float SpecularContribution = 0.4;
 const float DiffuseContribution = 1.0 - SpecularContribution;
@@ -21,7 +21,7 @@ const float DiffuseContribution = 1.0 - SpecularContribution;
 void main(void) {
   vec4 mcPosition = vec4(inPosition, 1.0f);
 
-  vec3 V = vec3(ViewMatrix * ModelMatrix * mcPosition);
+  vec3 V = vec3(ModelMatrix * mcPosition);
   vec3 N = normalize(NormalMatrix * inNormal);
   vec3 L = normalize(LightPosition - V);
   vec3 R = reflect(-L,N);
@@ -35,7 +35,7 @@ void main(void) {
   }
 
   exIntensity = DiffuseContribution * diffuse + SpecularContribution * specular;
-  exPosition = inPosition.xz;
+  exPosition = inPosition.xyz;
 
   gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * mcPosition;
 }

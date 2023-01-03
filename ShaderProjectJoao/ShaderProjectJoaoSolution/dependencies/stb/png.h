@@ -454,7 +454,7 @@
 #  endif
 
 /* Machine specific configuration. */
-#  include "pngconf.h"
+#  include "../stb/pngconf.h"
 #endif
 
 /*

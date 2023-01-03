@@ -55,7 +55,7 @@
 /* includes */
 #include <png.h>
 #if (PNG_LIBPNG_VER >= 10500)
-#include <zlib.h>
+#include "../stb/zlib.h"
 #endif
 
 // REMEMBER TO ADD -DNO_FREETYPE TO YOUR COMPILATION FLAGS IF PNGwriter WAS
@@ -63,7 +63,7 @@
 //
 // <png.h> must be included before FreeType headers.
 #ifndef NO_FREETYPE
-#include <ft2build.h>
+#include "../stb/ft2build.h"
 #include FT_FREETYPE_H
 #endif
 

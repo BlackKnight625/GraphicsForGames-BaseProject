@@ -174,22 +174,6 @@
     <ClInclude Include="mgl\Sphere.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="basic-dynamic-fs.glsl" />
-    <None Include="basic-dynamic-vs.glsl" />
-    <None Include="basic-final-fs.glsl" />
-    <None Include="basic-final-vs.glsl" />
-    <None Include="basic-fsparams-fs.glsl" />
-    <None Include="basic-fsparams-vs.glsl" />
-    <None Include="basic-minimum-fs.glsl" />
-    <None Include="basic-minimum-vs.glsl" />
-    <None Include="basic-ncolor-fs.glsl" />
-    <None Include="basic-ncolor-vs.glsl" />
-    <None Include="basic-projection-fs.glsl" />
-    <None Include="basic-projection-vs.glsl" />
-    <None Include="basic-vs2fsparams-fs.glsl" />
-    <None Include="basic-vs2fsparams-vs.glsl" />
-    <None Include="basic-vsparams-fs.glsl" />
-    <None Include="basic-vsparams-vs.glsl" />
     <None Include="color-fs.glsl" />
     <None Include="color-vs.glsl" />
   </ItemGroup>

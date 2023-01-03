@@ -28,11 +28,11 @@
 #include "mgl/Sphere.hpp"
 #include <glm/gtx/quaternion.hpp>
 
-/**
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "../stb/stb_image_write.h"
-#include "../stb/pngwriter.h"
-*/
+
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#include "../stb/stb_image_write.h"
+//#include "../stb/pngwriter.h"
+
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////// MYAPP
@@ -48,8 +48,12 @@ private:
     mgl::Cube cube = mgl::Cube();
     mgl::Sphere sphere = mgl::Sphere();
     bool isPerspective = true;
+
+    // Used to save the last position of the mouse
     float lastX;
     float lastY;
+
+    // Used to reset the scene
     float lastTranslationSphere;
     float lastTranslationCube;
     float lastRotationSphere;
@@ -58,9 +62,19 @@ private:
     float lastScaleSphereUp;
     float lastScaleCubeDown;
     float lastScaleCubeUp;
+
+    // Buttons to change the Cube with mouse
+    bool isPressingQ = false;
+    bool isPressingA = false;
+    bool isPressingZ = false;
+
+    // Buttons to change the Sphere with mouse
+    bool isPressingW = false;
+    bool isPressingS = false;
+    bool isPressingX = false;
+
+    bool isPressingLeftMouseButton = false;
     bool firstMouse = true;
-    float yaw;
-    float pitch;
 
 	void createMeshManager();
 	void createShaderProgram();
@@ -75,6 +89,7 @@ public:
     void displayCallback(GLFWwindow* win, double elapsed) override;
     void windowCloseCallback(GLFWwindow* win) override;
     void windowSizeCallback(GLFWwindow* win, int width, int height) override;
+    void cursorCallback(GLFWwindow* window, double xpos, double ypos) override;
     void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) override;
     void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
 
@@ -222,136 +237,50 @@ void saveScreenshotToFile(const char * filename, int windowWidth, int windowHeig
     }
     PNG.close();
 }
-*/
+**/
 
 void MyApp::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
-        if (firstMouse)
-        {
-            lastX = xpos;
-            lastY = ypos;
-            firstMouse = false;
-        }
-        /**
-
-        float xoffset = xpos - lastX;
-        float yoffset = lastY - ypos;
-        lastX = xpos;
-        lastY = ypos;
-
-        float sensitivity = 0.1f;
-        xoffset *= sensitivity;
-        yoffset *= sensitivity;
-
-        yaw += xoffset;
-        pitch += yoffset;
-
-        if (pitch > 89.0f)
-            pitch = 89.0f;
-        if (pitch < -89.0f)
-            pitch = -89.0f;
-
-        glm::vec3 front;
-        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        front.y = sin(glm::radians(pitch));
-        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-
-        glm::mat4 newViewMatrix = glm::lookAt(front, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0,1.0,0.0));
-        Camera->setViewMatrix(newViewMatrix);
-        */
-        float xAngle = lastX - xpos;
-        float yAngle = lastY - ypos;
-
-        glm::quat rotationQX = glm::angleAxis(xAngle, glm::normalize(glm::vec3(0.0, 1.0, 0.0)));
-        glm::mat4 rotationMX = glm::toMat4(rotationQX);
-
-        glm::vec4 eyePositionX();
-
+        isPressingLeftMouseButton = true;
+    }
+    else {
+        isPressingLeftMouseButton = false;
     }
 }
 
-void flipVertically(int width, int height, char* data)
-{
-    char rgb[3];
+void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
+    if (isPressingLeftMouseButton) {
+        if (isPressingQ) {
+            cube.scale(glm::vec3((xpos - lastX)/5.0f, (ypos - lastY)/5.0f, 0.0f));
+        }
+        else if (isPressingA) {
+            cube.rotate(1 * xpos - lastX, glm::vec3(1.0f, 0.0f, 0.0f));
+            cube.rotate(1 * ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
+        }
+        else if (isPressingZ) {
+            cube.translate(glm::vec3(xpos - lastX, ypos - lastY, 0.0f));
 
-    for (int y = 0; y < height / 2; ++y)
-    {
-        for (int x = 0; x < width; ++x)
-        {
-            int top = (x + y * width) * 3;
-            int bottom = (x + (height - y - 1) * width) * 3;
-
-            memcpy(rgb, data + top, sizeof(rgb));
-            memcpy(data + top, data + bottom, sizeof(rgb));
-            memcpy(data + bottom, rgb, sizeof(rgb));
+        }
+        else if (isPressingW) {
+            //sphere.scale();
+        }
+        else if (isPressingS) {
+            //sphere.rotate();
+        }
+        else if (isPressingX) {
+            //
         }
     }
+
+    lastX = xpos;
+    lastY = ypos;
 }
-/**
-int saveScreenshot(const char* filename)
-{
-    GLint viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-
-    int x = viewport[0];
-    int y = viewport[1];
-    int width = viewport[2];
-    int height = viewport[3];
-
-    char* data = (char*)malloc((size_t)(width * height * 3)); // 3 components (R, G, B)
-
-    if (!data)
-        return 0;
-
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-    glReadPixels(x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-    flipVertically(width, height, data);
-
-    int saved = stbi_write_png(filename, width, height, 3, data, 0);
-
-    free(data);
-
-    return saved;
-}
-*/
-const char* createScreenshotBasename()
-{
-    static char basename[30];
-
-    time_t t = time(NULL);
-    strftime(basename, 30, "%Y%m%d_%H%M%S.png", localtime(&t));
-
-    return basename;
-}
-
-/**
-int captureScreenshot()
-{
-    char filename[50];
-
-    strcpy(filename, "screenshots/");
-    strcat(filename, createScreenshotBasename());
-
-    int saved = saveScreenshot(filename);
-
-    if (saved)
-        printf("Successfully Saved Image: %s\n", filename);
-    else
-        fprintf(stderr, "Failed Saving Image: %s\n", filename);
-
-    return saved;
-}
-*/
 
 void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
         //saveScreenshotToFile("test.png", 800, 600);
-        //captureScreenshot();
     }
 
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
@@ -440,7 +369,7 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         lastScaleCubeUp += 1.0f;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_Q)) {
+    if (glfwGetKey(window, GLFW_KEY_K)) {
         cube.translate(glm::vec3(lastTranslationCube, 0.0f, 0.0f));
         cube.rotate(lastRotationCube, glm::vec3(0.0f, 0.0f, 1.0f));
         sphere.translate(glm::vec3(lastTranslationSphere, 0.0f, 0.0f));
@@ -466,6 +395,33 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         lastScaleSphereUp = 0.0f;
         lastScaleCubeDown = 0.0f;
         lastScaleCubeUp = 0.0f;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+        isPressingQ = true;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        isPressingA = true;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+        isPressingZ = true;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        isPressingW = true;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        isPressingS = true;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+        isPressingX = true;
+    }
+    else {
+        isPressingQ = false;
+        isPressingA = false;
+        isPressingZ = false;
+        isPressingW = false;
+        isPressingS = false;
+        isPressingX = false;
     }
 }
 
