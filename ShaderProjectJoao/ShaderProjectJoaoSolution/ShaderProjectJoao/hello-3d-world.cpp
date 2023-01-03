@@ -94,16 +94,21 @@ void MyApp::createShaderProgram() {
   Shaders->addShader(GL_FRAGMENT_SHADER, "color-fs.glsl");
 
   Shaders->addAttribute(mgl::POSITION_ATTRIBUTE, mgl::Mesh::POSITION);
-  Shaders->addUniform(mgl::MODEL_MATRIX);
-  Shaders->addUniformBlock(mgl::CAMERA_BLOCK, mgl::Mesh::UBO_BP);
-  Shaders->addUniform(mgl::ACTUAL_COLOR_ATTRIBUTE);
-
   if (MeshManager->getSphereMesh()->hasNormals()) {
       Shaders->addAttribute(mgl::NORMAL_ATTRIBUTE, mgl::Mesh::NORMAL);
   }
   if (MeshManager->getSphereMesh()->hasTexcoords()) {
       Shaders->addAttribute(mgl::TEXCOORD_ATTRIBUTE, mgl::Mesh::TEXCOORD);
   }
+  Shaders->addUniform(mgl::MODEL_MATRIX);
+  Shaders->addUniform(mgl::NORMAL_MATRIX);
+  Shaders->addUniformBlock(mgl::CAMERA_BLOCK, mgl::Mesh::UBO_BP);
+  
+  Shaders->addUniform("LightPosition");
+  Shaders->addUniform("BrickColor");
+  Shaders->addUniform("MortarColor");
+  Shaders->addUniform("BrickSize");
+  Shaders->addUniform("BrickPct");
 
   Shaders->create();
 }
@@ -464,10 +469,6 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         lastScaleCubeDown = 0.0f;
         lastScaleCubeUp = 0.0f;
     }
-
-    //Shaders->bind();
-    //glUniform1f(Shaders->Uniforms["Time0_1"].index, k);
-    //Shaders->unbind();
 }
 
 /////////////////////////////////////////////////////////////////////////// MAIN

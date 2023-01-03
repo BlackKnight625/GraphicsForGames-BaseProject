@@ -26,6 +26,16 @@ namespace mgl {
         }
     }
 
+    glm::mat3 IEntity::getNormalMatrix() {
+        if (Parent == nullptr) {
+            // No parent. Returning its own Model Matrix
+            return NormalMatrix;
+        }
+        else {
+            // Has a parent. Multiplying its own Matrix by the parent's
+            return Parent->getNormalMatrix() * NormalMatrix;
+        }
+    }
 
 
 
@@ -46,6 +56,6 @@ namespace mgl {
 
     void Entity::draw() {
         // Drawing this entity
-        EntityMesh->draw(ActualColor, getModelMatrix());
+        EntityMesh->draw(getNormalMatrix(), getModelMatrix());
     }
 }

@@ -161,13 +161,17 @@ namespace mgl {
         glBindVertexArray(0);
     }
 
-    void Mesh::draw(glm::vec4 actualColor, glm::mat4 modelMatrix) {
+    void Mesh::draw(glm::mat3 normalMatrix, glm::mat4 modelMatrix) {
 			(*ShaderProgram)->bind();
-			glUniform4f((*ShaderProgram)->Uniforms[ACTUAL_COLOR_ATTRIBUTE].index,
-                actualColor[0], actualColor[1], actualColor[2], actualColor[3]);
+			glUniformMatrix3fv((*ShaderProgram)->Uniforms[NORMAL_MATRIX].index,
+                1, GL_FALSE, glm::value_ptr(normalMatrix));
             glUniformMatrix4fv((*ShaderProgram)->Uniforms[MODEL_MATRIX].index,
                 1, GL_FALSE, glm::value_ptr(modelMatrix));
-
+            glUniform3f((*ShaderProgram)->Uniforms["LightPosition"].index, 30.0f, 30.0f, 10.0f);
+            glUniform4f((*ShaderProgram)->Uniforms["MarbleColor"].index, 0.7f, 0.7f, 0.7f, 1.0f);
+            glUniform4f((*ShaderProgram)->Uniforms["MortarColor"].index, 0.7f, 0.7f, 0.7f, 1.0f);
+            glUniform2f((*ShaderProgram)->Uniforms["MarbleSize"].index, 0.5f, 0.25f);
+            glUniform2f((*ShaderProgram)->Uniforms["BrickPct"].index, 0.9f, 0.8f);
 	        glBindVertexArray(VaoId);
 	        for (MeshData& mesh : Meshes) {
 	            glDrawElementsBaseVertex(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_INT,

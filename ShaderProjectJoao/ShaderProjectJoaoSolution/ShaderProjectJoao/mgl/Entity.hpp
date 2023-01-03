@@ -15,6 +15,7 @@ namespace mgl {
 	class IEntity {
 	protected:
 		glm::mat4 ModelMatrix = glm::mat4(1.0f);
+		glm::mat3 NormalMatrix = glm::mat3(1.0f);
 	public:
 		CompositeEntity* Parent = nullptr;
 
@@ -24,6 +25,7 @@ namespace mgl {
 		void rotate(float angle, glm::vec3 rotationAxis);
 		void scale(glm::vec3 scale);
 		glm::mat4 getModelMatrix();
+		glm::mat3 getNormalMatrix();
 	};
 
 	// Composition of Entities

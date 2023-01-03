@@ -50,7 +50,7 @@ namespace mgl {
         void flipUVs();
 
         void create(mgl::ShaderProgram **shaderProgram, const std::string& filename);
-        void draw(glm::vec4 actualColor, glm::mat4 modelMatrix);
+        void draw(glm::mat3 normalMatrix, glm::mat4 modelMatrix);
 
         bool hasNormals();
         bool hasTexcoords();
