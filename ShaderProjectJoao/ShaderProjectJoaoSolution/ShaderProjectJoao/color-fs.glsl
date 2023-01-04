@@ -1,27 +1,45 @@
 #version 330 core
 
-uniform vec4 MarbleColor, MortarColor;
-uniform vec2 MarbleSize, MarblePct;
+uniform vec3 LightPosition;
 
-in float exIntensity;
+uniform mat3 NormalMatrix;
+uniform mat4 ModelMatrix;
+
+uniform vec4 MarbleColor;
+
+uniform Camera {
+   mat4 ViewMatrix;
+   mat4 ProjectionMatrix;
+};
+
 in vec3 exPosition;
+in vec3 exNormal;
 out vec4 FragmentColor;
 
-void main(void) {
-  vec4 color;
-  vec3 position;
-  vec2 use_marble;
-  position = exPosition / vec3(MarbleSize, 0);
+const float SpecularContribution = 0.3;
+const float DiffuseContribution = 1.0 - SpecularContribution;
 
-  if(fract(position.y * 0.5) > 0.5) {
-  	position.x += 0.5;
+void main(void) {
+  float ambient = 0.20f;
+
+  vec3 V = vec3(ModelMatrix * vec4(exPosition, 1.0f));
+  vec3 N = normalize(NormalMatrix * exNormal);
+  vec3 L = normalize(LightPosition - V);
+  vec3 R = reflect(-L,N);
+  vec3 E = normalize(-V);
+
+  float diffuse = max(dot(L,N), 0.0);
+  float specular = 0.0;
+  if(diffuse > 0.0) {
+    specular = max(dot(R,E), 0.0);
+    specular = pow(specular, 8.0);
   }
 
-  position = fract(position);
-  use_marble = step(vec2(position), MarblePct);
+  vec4 color = MarbleColor;
 
-  color = mix(MortarColor, MarbleColor, use_marble.x * use_marble.y);
-  color *= exIntensity;
+  float intensity = DiffuseContribution * diffuse + SpecularContribution * specular + ambient;
+
+  color *= intensity;
 
   FragmentColor = color;
 }

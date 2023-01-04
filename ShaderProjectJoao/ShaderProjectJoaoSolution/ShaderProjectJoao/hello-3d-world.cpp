@@ -264,7 +264,6 @@ void MyApp::mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
     if (isPressingLeftMouseButton) {
         if (isPressingQ) {
-            cout << (xpos - lastX) / 20.0f << endl;
             float scale = xpos - lastX;
             if (scale < 0) {
                 scale = 0.995;
@@ -286,13 +285,11 @@ void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
             cube.rotate(ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
             lastRotationCubeX -= (xpos - lastX);
             lastRotationCubeY -= (ypos - lastY);
-            cout << xpos - lastX << endl;
-            cout << lastRotationCubeX << endl;
         }
         else if (isPressingZ) {
-            cube.translate(glm::vec3((xpos - lastX) / 20.0f, (ypos - lastY) / 20.0f, 0.0f));
+            cube.translate(glm::vec3((xpos - lastX) / 20.0f, (lastY - ypos) / 20.0f, 0.0f));
             lastTranslationCubeX -= ((xpos - lastX) / 20.0f);
-            lastTranslationCubeY -= ((ypos - lastY) / 20.0f);
+            lastTranslationCubeY -= ((lastY - ypos) / 20.0f);
         }
         else if (isPressingW) {
             float scale = xpos - lastX;
@@ -311,17 +308,17 @@ void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
             }
         }
         else if (isPressingS) {
-            cout << xpos - lastX << endl;
-            cout << lastRotationSphereX << endl;
             sphere.rotate(xpos - lastX, glm::vec3(1.0f, 0.0f, 0.0f));
             sphere.rotate(ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
             lastRotationSphereX -= (xpos - lastX);
             lastRotationSphereY -= (ypos - lastY);
+            cout << lastRotationSphereX << endl;
+            cout << lastRotationSphereY << endl;
         }
         else if (isPressingX) {
-            sphere.translate(glm::vec3((xpos - lastX) / 20.0f, (ypos - lastY) / 20.0f, 0.0f));
+            sphere.translate(glm::vec3((xpos - lastX) / 20.0f, (lastY - ypos) / 20.0f, 0.0f));
             lastTranslationSphereX -= ((xpos - lastX) / 20.0f);
-            lastTranslationSphereY -= ((ypos - lastY) / 20.0f);
+            lastTranslationSphereY -= ((lastY - ypos) / 20.0f);
         }
     }
 
@@ -430,6 +427,8 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
         cube.rotate(lastRotationCubeY, glm::vec3(0.0f, 1.0f, 0.0f));
 
         sphere.translate(glm::vec3(lastTranslationSphere, 0.0f, 0.0f));
+        cout << lastRotationSphereX << endl;
+        cout << lastRotationSphereY << endl;
         sphere.translate(glm::vec3(lastTranslationSphereX, 0.0f, 0.0f));
         sphere.translate(glm::vec3(0.0f, lastTranslationSphereY, 0.0f));
         sphere.rotate(lastRotationSphere, glm::vec3(0.0f, 0.0f, 1.0f));

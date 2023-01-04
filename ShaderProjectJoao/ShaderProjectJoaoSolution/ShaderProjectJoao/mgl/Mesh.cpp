@@ -167,11 +167,8 @@ namespace mgl {
                 1, GL_FALSE, glm::value_ptr(normalMatrix));
             glUniformMatrix4fv((*ShaderProgram)->Uniforms[MODEL_MATRIX].index,
                 1, GL_FALSE, glm::value_ptr(modelMatrix));
-            glUniform3f((*ShaderProgram)->Uniforms["LightPosition"].index, 100.0f, 100.0f, 100.0f);
-            glUniform4f((*ShaderProgram)->Uniforms["MarbleColor"].index, 0.7f, 0.7f, 0.7f, 1.0f);
-            glUniform4f((*ShaderProgram)->Uniforms["MortarColor"].index, 0.7f, 0.7f, 0.7f, 1.0f);
-            glUniform2f((*ShaderProgram)->Uniforms["MarbleSize"].index, 0.5f, 0.25f);
-            glUniform2f((*ShaderProgram)->Uniforms["MarblePct"].index, 0.9f, 0.8f);
+            glUniform3f((*ShaderProgram)->Uniforms["LightPosition"].index, 15.0f, 15.0f, 25.0f);
+            glUniform4f((*ShaderProgram)->Uniforms["MarbleColor"].index, 0.8f, 0.8f, 0.8f, 1.0f);
 	        glBindVertexArray(VaoId);
 	        for (MeshData& mesh : Meshes) {
 	            glDrawElementsBaseVertex(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_INT,
