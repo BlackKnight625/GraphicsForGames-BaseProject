@@ -104,6 +104,7 @@ public:
     void cursorCallback(GLFWwindow* window, double xpos, double ypos) override;
     void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) override;
     void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
+    void createTextures_noise3d();
 
     virtual ~MyApp() {
         delete Shaders;
@@ -133,9 +134,7 @@ void MyApp::createShaderProgram() {
   
   Shaders->addUniform("LightPosition");
   Shaders->addUniform("MarbleColor");
-  Shaders->addUniform("MortarColor");
-  Shaders->addUniform("MarbleSize");
-  Shaders->addUniform("MarblePct");
+  Shaders->addUniform("NoiseTexture");
 
   Shaders->create();
 }
