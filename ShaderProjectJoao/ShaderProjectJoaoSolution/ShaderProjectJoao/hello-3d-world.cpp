@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -28,11 +29,9 @@
 #include "mgl/Sphere.hpp"
 #include <glm/gtx/quaternion.hpp>
 
-
-//#define STB_IMAGE_WRITE_IMPLEMENTATION
-//#include "../stb/stb_image_write.h"
-//#include "../stb/pngwriter.h"
-
+#include <IL/il.h>
+#include <IL/ilu.h>
+#include <IL/ilut.h>
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////// MYAPP
@@ -250,6 +249,26 @@ void saveScreenshotToFile(const char * filename, int windowWidth, int windowHeig
 }
 **/
 
+wstring widen(const string& str)
+{
+    wostringstream wstm;
+    const ctype<wchar_t>& ctfacet = use_facet<ctype<wchar_t>>(wstm.getloc());
+    for (size_t i = 0; i < str.size(); ++i)
+        wstm << ctfacet.widen(str[i]);
+    return wstm.str();
+}
+
+void takeScreenshot(const char* screenshotFile)
+{
+    ILuint imageID = ilGenImage();
+    ilBindImage(imageID);
+    ilutGLScreen();
+    ilEnable(IL_FILE_OVERWRITE);
+    ilSaveImage(widen(screenshotFile).c_str());
+    ilDeleteImage(imageID);
+    printf("Screenshot saved to: %s\n", screenshotFile);
+}
+
 void MyApp::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
@@ -329,6 +348,7 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
         //saveScreenshotToFile("test.png", 800, 600);
+        takeScreenshot("screenshot.png");
     }
 
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
