@@ -29,9 +29,8 @@
 #include "mgl/Sphere.hpp"
 #include <glm/gtx/quaternion.hpp>
 
-#include <IL/il.h>
-#include <IL/ilu.h>
-#include <IL/ilut.h>
+#define stringify( name ) #name
+#include "SOIL2.h"
 
 using namespace std;
 ////////////////////////////////////////////////////////////////////////// MYAPP
@@ -73,6 +72,8 @@ private:
     float lastScaleCubeUpMouse;
     float lastScaleSphereDownMouse;
     float lastScaleSphereUpMouse;
+
+    int screenshotNumber = 1;
 
     // Buttons to change the Cube with mouse
     bool isPressingQ = false;
@@ -212,26 +213,6 @@ void MyApp::windowSizeCallback(GLFWwindow* win, int winx, int winy) {
 
 void MyApp::displayCallback(GLFWwindow* win, double elapsed) { drawScene(); }
 
-wstring widen(const string& str)
-{
-    wostringstream wstm;
-    const ctype<wchar_t>& ctfacet = use_facet<ctype<wchar_t>>(wstm.getloc());
-    for (size_t i = 0; i < str.size(); ++i)
-        wstm << ctfacet.widen(str[i]);
-    return wstm.str();
-}
-
-void takeScreenshot(const char* screenshotFile)
-{
-    ILuint imageID = ilGenImage();
-    ilBindImage(imageID);
-    ilutGLScreen();
-    ilEnable(IL_FILE_OVERWRITE);
-    ilSaveImage(widen(screenshotFile).c_str());
-    ilDeleteImage(imageID);
-    printf("Screenshot saved to: %s\n", screenshotFile);
-}
-
 void MyApp::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
@@ -308,19 +289,29 @@ void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
 void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        takeScreenshot("screenshot.png");
+        string fileName = "screenshots/screenshot" + to_string(screenshotNumber) + ".bmp";
+        cout << fileName << endl;
+        if (!SOIL_save_screenshot(fileName.c_str(),
+            SOIL_SAVE_TYPE_BMP, 0, 0, 800, 600)) {
+            // Handle error here
+            cout << "There was an error saving the image" << endl;
+        }
+        else {
+            screenshotNumber++;
+            cout << "You saved an image called " + fileName + " in the directory named screenshots!" << endl;
+        }
     }
 
     if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
         if (isPerspective) {
             Camera->setProjectionMatrix(ProjectionMatrix1);
             isPerspective = false;
-            cout << "\nActivate orthographic projection\n";
+            cout << "Activate orthographic projection" << endl;
         }
         else {
             Camera->setProjectionMatrix(ProjectionMatrix2);
             isPerspective = true;
-            cout << "\nActivate perspective projection\n";
+            cout << "Activate perspective projection" << endl;
         }
     }
 
