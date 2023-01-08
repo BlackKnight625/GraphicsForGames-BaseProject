@@ -40,7 +40,7 @@ void main(void) {
   float intensity = DiffuseContribution * diffuse + SpecularContribution * specular + ambient;
 
   vec3 wcPosition = vec3(ModelMatrix * vec4(exPosition, 1.0f));
-  vec3 p = wcPosition * 0.1f + 0.1f;
+  vec3 p = wcPosition * 0.075f + 0.075f;
   //float noise = texture(NoiseTexture, p).r * 0.5f + 0.5f;
 
   //FragmentColor = vec4(vec3(noise * intensity), 1.0f);
