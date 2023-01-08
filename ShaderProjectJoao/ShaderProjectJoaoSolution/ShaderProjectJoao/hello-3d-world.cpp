@@ -212,43 +212,6 @@ void MyApp::windowSizeCallback(GLFWwindow* win, int winx, int winy) {
 
 void MyApp::displayCallback(GLFWwindow* win, double elapsed) { drawScene(); }
 
-const int numberOfPixels = 800 * 600 * 3;
-
-/**
-void saveScreenshotToFile(const char * filename, int windowWidth, int windowHeight) {
-    GLfloat* pixels = new GLfloat[numberOfPixels];
-    glReadPixels(0.0, 0.0, windowWidth, windowHeight, GL_RGB, GL_FLOAT, pixels);
-    pngwriter PNG(windowWidth, windowHeight, 1.0, filename);
-    size_t x = 1;
-    size_t y = 1;
-    double R, G, B;
-    for (size_t i = 0; i < numberOfPixels; i++) // "i" is the index for array "pixels"
-    {
-        switch (i % 3)
-        {
-        case 2:
-            B = static_cast<double>(pixels[i]); break;
-        case 1:
-            G = static_cast<double>(pixels[i]); break;
-        case 0:
-            R = static_cast<double>(pixels[i]);
-            PNG.plot(x, y, R, G, B);     // set pixel to position (x, y)
-            if (x == windowWidth)             // Move to the next row of image
-            {
-                x = 1;
-                y++;
-            }
-            else                       // To the next pixel
-            {
-                x++;
-            }
-            break;
-        }
-    }
-    PNG.close();
-}
-**/
-
 wstring widen(const string& str)
 {
     wostringstream wstm;
@@ -345,7 +308,6 @@ void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
 void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        //saveScreenshotToFile("test.png", 800, 600);
         takeScreenshot("screenshot.png");
     }
 
