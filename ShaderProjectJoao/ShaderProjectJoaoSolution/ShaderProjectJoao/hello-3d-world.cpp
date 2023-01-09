@@ -226,6 +226,7 @@ void MyApp::mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
     if (isPressingLeftMouseButton) {
         if (isPressingQ) {
+            cout << "Scaling cube" << endl;
             float scale = xpos - lastX;
             if (scale < 0) {
                 scale = 0.995;
@@ -243,17 +244,20 @@ void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
             
         }
         else if (isPressingA) {
+            cout << "Rotating cube" << endl;
             cube.rotate(xpos - lastX, glm::vec3(1.0f, 0.0f, 0.0f));
             cube.rotate(ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
             lastRotationCubeX.push_back(-(xpos - lastX));
             lastRotationCubeY.push_back(-(ypos - lastY));
         }
         else if (isPressingZ) {
+            cout << "Translating cube" << endl;
             cube.translate(glm::vec3((xpos - lastX) / 20.0f, (lastY - ypos) / 20.0f, 0.0f));
             lastTranslationCubeX -= ((xpos - lastX) / 20.0f);
             lastTranslationCubeY -= ((lastY - ypos) / 20.0f);
         }
         else if (isPressingW) {
+            cout << "Scaling sphere" << endl;
             float scale = xpos - lastX;
             if (scale < 0) {
                 scale = 0.995;
@@ -270,12 +274,14 @@ void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
             }
         }
         else if (isPressingS) {
+            cout << "Rotating sphere" << endl;
             sphere.rotate(xpos - lastX, glm::vec3(1.0f, 0.0f, 0.0f));
             sphere.rotate(ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
             lastRotationSphereX.push_back(-(xpos - lastX));
             lastRotationSphereY.push_back(-(ypos - lastY));
         }
         else if (isPressingX) {
+            cout << "Translating sphere" << endl;
             sphere.translate(glm::vec3((xpos - lastX) / 20.0f, (lastY - ypos) / 20.0f, 0.0f));
             lastTranslationSphereX -= ((xpos - lastX) / 20.0f);
             lastTranslationSphereY -= ((lastY - ypos) / 20.0f);
@@ -290,7 +296,6 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
         string fileName = "screenshots/screenshot" + to_string(screenshotNumber) + ".bmp";
-        cout << fileName << endl;
         if (!SOIL_save_screenshot(fileName.c_str(),
             SOIL_SAVE_TYPE_BMP, 0, 0, 800, 600)) {
             // Handle error here
