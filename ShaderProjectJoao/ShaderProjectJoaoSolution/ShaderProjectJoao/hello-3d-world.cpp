@@ -104,7 +104,7 @@ public:
     void cursorCallback(GLFWwindow* window, double xpos, double ypos) override;
     void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) override;
     void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
-    void createTextures_noise3d();
+    bool saveScreenshot(const char* filename, int image_type, int x, int y, int width, int height);
 
     virtual ~MyApp() {
         delete Shaders;
@@ -226,7 +226,6 @@ void MyApp::mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
     if (isPressingLeftMouseButton) {
         if (isPressingQ) {
-            cout << "Scaling cube" << endl;
             float scale = xpos - lastX;
             if (scale < 0) {
                 scale = 0.995;
@@ -244,20 +243,17 @@ void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
             
         }
         else if (isPressingA) {
-            cout << "Rotating cube" << endl;
             cube.rotate(xpos - lastX, glm::vec3(1.0f, 0.0f, 0.0f));
             cube.rotate(ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
             lastRotationCubeX.push_back(-(xpos - lastX));
             lastRotationCubeY.push_back(-(ypos - lastY));
         }
         else if (isPressingZ) {
-            cout << "Translating cube" << endl;
             cube.translate(glm::vec3((xpos - lastX) / 20.0f, (lastY - ypos) / 20.0f, 0.0f));
             lastTranslationCubeX -= ((xpos - lastX) / 20.0f);
             lastTranslationCubeY -= ((lastY - ypos) / 20.0f);
         }
         else if (isPressingW) {
-            cout << "Scaling sphere" << endl;
             float scale = xpos - lastX;
             if (scale < 0) {
                 scale = 0.995;
@@ -274,14 +270,12 @@ void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
             }
         }
         else if (isPressingS) {
-            cout << "Rotating sphere" << endl;
             sphere.rotate(xpos - lastX, glm::vec3(1.0f, 0.0f, 0.0f));
             sphere.rotate(ypos - lastY, glm::vec3(0.0f, 1.0f, 0.0f));
             lastRotationSphereX.push_back(-(xpos - lastX));
             lastRotationSphereY.push_back(-(ypos - lastY));
         }
         else if (isPressingX) {
-            cout << "Translating sphere" << endl;
             sphere.translate(glm::vec3((xpos - lastX) / 20.0f, (lastY - ypos) / 20.0f, 0.0f));
             lastTranslationSphereX -= ((xpos - lastX) / 20.0f);
             lastTranslationSphereY -= ((lastY - ypos) / 20.0f);
@@ -292,12 +286,74 @@ void MyApp::cursorCallback(GLFWwindow* window, double xpos, double ypos) {
     lastY = ypos;
 }
 
+bool MyApp::saveScreenshot(const char* filename, int image_type, int x, int y, int width, int height) {
+    unsigned char* pixelData;
+    int i, j;
+    int saveResult;
+    GLint packAligment;
+
+    glGetIntegerv(GL_PACK_ALIGNMENT, &packAligment);
+    if (packAligment != 1)
+    {
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    }
+
+    // Get the data from OpenGL
+    pixelData = (unsigned char*)malloc(3 * width * height);
+    glReadPixels(x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixelData);
+
+    if (packAligment != 1)
+    {
+        glPixelStorei(GL_PACK_ALIGNMENT, packAligment);
+    }
+
+    // Flip the image vertically
+    for (j = 0; j * 2 < height; ++j)
+    {
+        int index1 = j * width * 3;
+        int index2 = (height - 1 - j) * width * 3;
+        for (i = width * 3; i > 0; --i)
+        {
+            unsigned char temp = pixelData[index1];
+            pixelData[index1] = pixelData[index2];
+            pixelData[index2] = temp;
+            ++index1;
+            ++index2;
+        }
+    }
+
+    // Save the image
+    saveResult = SOIL_save_image(filename, image_type, width, height, 3, pixelData);
+
+    // Free the memory
+    SOIL_free_image_data(pixelData);
+    return saveResult;
+}
+
+void flipVertically(int width, int height, char* data)
+{
+    char rgb[3];
+
+    for (int y = 0; y < height / 2; ++y)
+    {
+        for (int x = 0; x < width; ++x)
+        {
+            int top = (x + y * width) * 3;
+            int bottom = (x + (height - y - 1) * width) * 3;
+
+            memcpy(rgb, data + top, sizeof(rgb));
+            memcpy(data + top, data + bottom, sizeof(rgb));
+            memcpy(data + bottom, rgb, sizeof(rgb));
+        }
+    }
+}
+
 void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
-        string fileName = "screenshots/screenshot" + to_string(screenshotNumber) + ".bmp";
+        string fileName = "screenshots/screenshot" + to_string(screenshotNumber) + ".png";
         if (!SOIL_save_screenshot(fileName.c_str(),
-            SOIL_SAVE_TYPE_BMP, 0, 0, 800, 600)) {
+            SOIL_SAVE_TYPE_PNG, 0, 0, 800, 600)) {
             // Handle error here
             cout << "There was an error saving the image" << endl;
         }
@@ -460,21 +516,39 @@ void MyApp::keyCallback(GLFWwindow* window, int key, int scancode, int action, i
     }
 
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+        if (!isPressingQ) {
+            cout << "Scaling cube" << endl;
+        }
         isPressingQ = true;
     }
     else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        if (!isPressingA) {
+            cout << "Rotating cube" << endl;
+        }
         isPressingA = true;
     }
     else if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS) {
+        if (!isPressingZ) {
+            cout << "Translating cube" << endl;
+        }
         isPressingZ = true;
     }
     else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        if (!isPressingW) {
+            cout << "Scaling sphere" << endl;
+        }
         isPressingW = true;
     }
     else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        if (!isPressingS) {
+            cout << "Rotating sphere" << endl;
+        }
         isPressingS = true;
     }
     else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS) {
+        if (!isPressingX) {
+            cout << "Translating sphere" << endl;
+        }
         isPressingX = true;
     }
     else {
