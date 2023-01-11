@@ -53,3 +53,7 @@ BaseProject/BaseProjectSolution/dependencies/assimp/
 /ShaderProjectJoao/ShaderProjectJoaoSolution/ShaderProjectJoao/intermediate/
 ShaderProjectJoao/ShaderProjectJoaoSolution/.vs/ShaderProjectJoaoSolution/FileContentIndex/read.lock
 ShaderProjectJoao/ShaderProjectJoaoSolution/dependencies/assimp/
+
+/ShaderProjectRafael/BaseProjectSolution/ShaderProjectJoao/intermediate/
+ShaderProjectRafael/BaseProjectSolution/.vs/ShaderProjectJoaoSolution/FileContentIndex/read.lock
+ShaderProjectRafael/BaseProjectSolution/dependencies/assimp/
