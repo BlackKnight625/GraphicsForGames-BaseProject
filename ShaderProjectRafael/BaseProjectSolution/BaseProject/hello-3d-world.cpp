@@ -12,6 +12,8 @@
 
 #include <iostream>
 
+#include<bits/stdc++.h>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -24,6 +26,10 @@
 #include "mgl/Mesh.hpp"
 #include "mgl/Crab.hpp"
 
+#include <chrono>
+
+#include "mgl/Planets.hpp"
+
 ////////////////////////////////////////////////////////////////////////// MYAPP
 
 class MyApp : public mgl::App {
@@ -34,14 +40,15 @@ private:
 	mgl::ShaderProgram *Shaders = nullptr;
 	mgl::Camera *Camera = nullptr;
 	mgl::MeshManager *MeshManager = nullptr;
-    mgl::Crab crab = mgl::Crab();
+
+    std::vector<mgl::Body*> _bodies;
 
 	void createMeshManager();
 	void createShaderProgram();
 	void createBufferObjects();
 	void destroyBufferObjects();
-	void drawScene();
-    void createCrab();
+	void drawScene(double elapsed);
+    void createEntities();
 
 public:
     void initCallback(GLFWwindow* win) override;
@@ -93,13 +100,21 @@ void MyApp::createBufferObjects() {
 	Camera = new mgl::Camera(mgl::Mesh::UBO_BP);
 }
 
-void MyApp::createCrab() {
-    crab.createCrab(MeshManager);
+void MyApp::createEntities() {
+
+
+    for(mgl::Body* entity : _bodies) {
+        entity->createEntity(MeshManager);
+    }
 }
 
 
 void MyApp::destroyBufferObjects() {
     MeshManager->destroyBufferObjects();
+
+    for (mgl::Body* entity : _bodies) {
+        delete entity;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////// SCENE
@@ -125,12 +140,36 @@ const glm::mat4 ProjectionMatrix1 =
 const glm::mat4 ProjectionMatrix2 =
     glm::perspective(glm::radians(30.0f), 4.0f / 3.0f, 1.0f, 25.0f);
 
-void MyApp::drawScene() {
+void MyApp::drawScene(double elapsed) {
 
-  Camera->setViewMatrix(ViewMatrix1);
-  Camera->setProjectionMatrix(ProjectionMatrix2);
+	Camera->setViewMatrix(ViewMatrix1);
+	Camera->setProjectionMatrix(ProjectionMatrix2);
 
-  crab.draw();
+    mgl::UpdateInfo info;
+    mgl::UpdateInfo* infoReference = &info;
+
+    info.delta = (float) (elapsed);
+    info.bodies = &_bodies;
+
+	// Updating everyone's positions
+	for (mgl::Body* entity : _bodies) {
+		entity->update(&info);
+	}
+
+    // Removing bodies
+    auto removeLambda = [infoReference](mgl::Body* element) {
+        return std::find(infoReference->toRemove.begin(), infoReference->toRemove.end(), element) != infoReference->toRemove.end();
+    };
+
+    std::remove_if(_bodies.begin(), _bodies.end(), removeLambda);
+
+    // Adding bodies
+    _bodies.insert(_bodies.end(), info.toAdd.begin(), info.toAdd.end());
+
+    // Drawing everyone
+	for (mgl::Body* entity : _bodies) {
+		 entity->draw();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////// CALLBACKS
@@ -139,7 +178,7 @@ void MyApp::initCallback(GLFWwindow *win) {
     createMeshManager();
     createBufferObjects();
     createShaderProgram();
-    createCrab();
+    createEntities();
 }
 
 void MyApp::windowCloseCallback(GLFWwindow *win) { destroyBufferObjects(); }
@@ -148,7 +187,7 @@ void MyApp::windowSizeCallback(GLFWwindow *win, int winx, int winy) {
   glViewport(0, 0, winx, winy);
 }
 
-void MyApp::displayCallback(GLFWwindow *win, double elapsed) { drawScene(); }
+void MyApp::displayCallback(GLFWwindow *win, double elapsed) { drawScene(elapsed); }
 
 /////////////////////////////////////////////////////////////////////////// MAIN
 

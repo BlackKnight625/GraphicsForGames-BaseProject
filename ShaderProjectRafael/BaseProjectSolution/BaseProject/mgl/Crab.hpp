@@ -6,10 +6,8 @@
 
 namespace mgl {
 	class Crab : public CompositeEntity {
-	private:
-
 	public:
-		void createCrab(MeshManager *meshManager);
+		void createEntity(MeshManager* meshManager) override;
 	};
 }
 

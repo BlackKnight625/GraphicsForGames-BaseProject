@@ -1,7 +1,7 @@
 ﻿#include "Crab.hpp"
 
 namespace mgl {
-	void Crab::createCrab(MeshManager *meshManager) {
+	void Crab::createEntity(MeshManager *meshManager) {
 		// An arm
 		CompositeEntity* arm = new CompositeEntity(this);
 

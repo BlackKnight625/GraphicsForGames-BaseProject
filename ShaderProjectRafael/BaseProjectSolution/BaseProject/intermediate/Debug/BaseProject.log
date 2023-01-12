@@ -1,11 +1,6 @@
 ﻿  hello-3d-world.cpp
   Crab.cpp
   Entity.cpp
-  Mesh.cpp
-  MeshManager.cpp
-  mglApp.cpp
-  mglCamera.cpp
-  mglError.cpp
-  mglShader.cpp
+  Planets.cpp
   Gerando Código...
   BaseProject.vcxproj -> C:\Users\rafae\Desktop\University\Courses\GraphicalComputationForGames\Projects\ShaderProjectRafael\BaseProjectSolution\build\Debug\BaseProject.exe

@@ -6,6 +6,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <vector>
+#include <glm/detail/type_quat.hpp>
+#include <glm/gtx/quaternion.hpp>
+
+#include "Planets.hpp"
 
 namespace mgl {
 	class CompositeEntity;
@@ -14,16 +18,26 @@ namespace mgl {
 	// 'Interface' for Entities (it's almost an interface)
 	class IEntity {
 	protected:
-		glm::mat4 ModelMatrix = glm::mat4(1.0f);
+		glm::vec3 _position = glm::vec3(0.0f);
+		glm::quat _rotationQuaternion = glm::quat(0, glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::vec3 _scale = glm::vec3(1.0f);
 	public:
 		CompositeEntity* Parent = nullptr;
 
 		virtual void draw() = 0;
+		virtual void createEntity(MeshManager* meshManager);
 
 		void translate(glm::vec3 translation);
 		void rotate(float angle, glm::vec3 rotationAxis);
 		void scale(glm::vec3 scale);
 		glm::mat4 getModelMatrix();
+		glm::mat4 getPositionMatrix();
+		glm::mat4 getRotationMatrix();
+		glm::mat4 getScaleMatrix();
+
+		virtual bool isBody();
+
+		virtual ~IEntity() = default;
 	};
 
 	// Composition of Entities
@@ -40,7 +54,7 @@ namespace mgl {
 			Parent->addChild(this);
 		}
 
-		virtual ~CompositeEntity() {
+		~CompositeEntity() override {
 			for(IEntity* child : Children) {
 				delete child;
 			}
@@ -68,7 +82,7 @@ namespace mgl {
 			Parent->addChild(this);
 		}
 
-		virtual ~Entity() = default;
+		~Entity() override = default;
 		
 		void draw() override;
 	};

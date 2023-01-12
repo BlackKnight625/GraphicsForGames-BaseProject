@@ -3,27 +3,44 @@
 
 namespace mgl {
     void IEntity::translate(glm::vec3 translation) {
-        ModelMatrix = glm::translate(translation) * ModelMatrix;
+        _position += translation;
     }
 
     void IEntity::rotate(float degrees, glm::vec3 rotationAxis) {
-        ModelMatrix = glm::rotate(glm::radians(degrees), rotationAxis) * ModelMatrix;
+        _rotationQuaternion = glm::quat(glm::radians(degrees), rotationAxis) * _rotationQuaternion;
     }
 
     void IEntity::scale(glm::vec3 scale) {
-        ModelMatrix = glm::scale(scale) * ModelMatrix;
+        _scale += scale;
     }
 
+    glm::mat4 IEntity::getPositionMatrix() {
+        return glm::translate(_position);
+    }
+
+    glm::mat4 IEntity::getRotationMatrix() {
+        return glm::toMat4(_rotationQuaternion);
+    }
+
+    glm::mat4 IEntity::getScaleMatrix() {
+        return glm::scale(_scale);
+    }
 
     glm::mat4 IEntity::getModelMatrix() {
+        glm::mat4 modelMatrix = getPositionMatrix() * getRotationMatrix() * getScaleMatrix();
+
         if (Parent == nullptr) {
             // No parent. Returning its own Model Matrix
-            return ModelMatrix;
+            return modelMatrix;
         }
         else {
             // Has a parent. Multiplying its own Matrix by the parent's
-            return Parent->getModelMatrix() * ModelMatrix;
+            return Parent->getModelMatrix() * modelMatrix;
         }
+    }
+
+    bool IEntity::isBody() {
+        return false;
     }
 
 
@@ -48,4 +65,14 @@ namespace mgl {
         // Drawing this entity
         EntityMesh->draw(ActualColor, getModelMatrix());
     }
+
+    void IEntity::update(float delta) {
+	    // Do nothing by default
+    }
+
+    void IEntity::createEntity(MeshManager* meshManager) {
+	    // Do nothing by default
+    }
+
+
 }

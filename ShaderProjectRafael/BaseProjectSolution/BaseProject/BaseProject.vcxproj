@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hello-3d-world.cpp" />
+    <ClCompile Include="mgl\Planets.cpp" />
     <ClCompile Include="mgl\Crab.cpp" />
     <ClCompile Include="mgl\Entity.cpp" />
     <ClCompile Include="mgl\Mesh.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="mgl\mglShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mgl\Planets.hpp" />
     <ClInclude Include="mgl\Crab.hpp" />
     <ClInclude Include="mgl\Entity.hpp" />
     <ClInclude Include="mgl\Mesh.hpp" />
