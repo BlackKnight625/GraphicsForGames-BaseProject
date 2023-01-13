@@ -135,6 +135,7 @@ void MyApp::createShaderProgram() {
   Shaders->addUniform("LightPosition");
   Shaders->addUniform("MarbleColor");
   Shaders->addUniform("NoiseTexture");
+  Shaders->addUniform(mgl::SAMPLER_ATTRIBUTE);
 
   Shaders->create();
 }

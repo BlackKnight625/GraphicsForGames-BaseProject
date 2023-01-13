@@ -157,7 +157,9 @@
     <ClCompile Include="mgl\mglApp.cpp" />
     <ClCompile Include="mgl\mglCamera.cpp" />
     <ClCompile Include="mgl\mglError.cpp" />
+    <ClCompile Include="mgl\mglSampler.cpp" />
     <ClCompile Include="mgl\mglShader.cpp" />
+    <ClCompile Include="mgl\mglTexture.cpp" />
     <ClCompile Include="mgl\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,7 +172,9 @@
     <ClInclude Include="mgl\mglCamera.hpp" />
     <ClInclude Include="mgl\mglConventions.hpp" />
     <ClInclude Include="mgl\mglError.hpp" />
+    <ClInclude Include="mgl\mglSampler.hpp" />
     <ClInclude Include="mgl\mglShader.hpp" />
+    <ClInclude Include="mgl\mglTexture.hpp" />
     <ClInclude Include="mgl\Sphere.hpp" />
   </ItemGroup>
   <ItemGroup>
