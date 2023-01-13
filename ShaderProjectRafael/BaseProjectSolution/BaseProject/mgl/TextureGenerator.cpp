@@ -109,7 +109,7 @@ namespace mgl {
         const int width = 1024;
         const int height = 1024;
 
-        unsigned char image[width * height * 4];
+        unsigned char* image = new unsigned char[width * height * 4];
 
         textureGenerator->generate(image, width, height);
 
@@ -147,6 +147,8 @@ namespace mgl {
 
         glGenerateMipmap(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, 0);
+
+        delete image;
     }
 
     inline void ITextureGenerator::setRGBA(unsigned char* image, int pixelIndex, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {

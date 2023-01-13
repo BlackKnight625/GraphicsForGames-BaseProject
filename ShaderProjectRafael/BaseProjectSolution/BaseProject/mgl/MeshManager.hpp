@@ -10,7 +10,7 @@ namespace mgl {
 	public:
 		MeshManager() = default;
 
-		void createCrabMesh(ShaderProgram** shaderProgram, const std::string& sphereFilename)
+		void createSphereMesh(ShaderProgram** shaderProgram, const std::string& sphereFilename)
 		{
 			sphereMesh.create(shaderProgram, sphereFilename);
 		}

@@ -110,7 +110,6 @@ namespace mgl {
 #endif
 
         processScene(scene);
-        createBufferObjects();
     }
 
     void Mesh::createBufferObjects() {

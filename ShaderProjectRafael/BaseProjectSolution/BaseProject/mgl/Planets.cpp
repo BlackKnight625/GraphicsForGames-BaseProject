@@ -55,7 +55,7 @@ namespace mgl {
 	void Body::draw() {
 		// Drawing this entity
 		std::cout << "Drawing..." << std::endl;
-		_mesh->draw(glm::vec4(1.0f), getModelMatrix());
+		_mesh->draw(glm::vec4(1.0f, 0.5f, 0.2f, 1.0f), getModelMatrix());
 	}
 
 

@@ -87,7 +87,7 @@ void MyApp::createShaderProgram() {
 void MyApp::createMeshManager() {
     MeshManager = new mgl::MeshManager();
 
-    MeshManager->createCrabMesh(&Shaders, "../assets/models/Sphere.obj");
+    MeshManager->createSphereMesh(&Shaders, "../assets/models/Sphere.obj");
 }
 
 
