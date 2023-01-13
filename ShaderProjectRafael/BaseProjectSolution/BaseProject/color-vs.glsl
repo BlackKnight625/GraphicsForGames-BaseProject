@@ -6,6 +6,7 @@ in vec3 inNormal;
 
 uniform mat4 ModelMatrix;
 uniform vec4 actualColor;
+uniform sampler2D sampler;
 
 uniform Camera {
    mat4 ViewMatrix;

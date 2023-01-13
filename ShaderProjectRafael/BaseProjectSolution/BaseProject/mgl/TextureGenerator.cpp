@@ -93,6 +93,11 @@ namespace mgl {
         glUniform1i(shader->Uniforms[uniform].index, index);
     }
 
+    TextureInfo::TextureInfo() {
+	    
+    }
+
+
     //////////////////////////////////////////////////////////////////////// Texture
 
     Texture::Texture() : id(-1) {}

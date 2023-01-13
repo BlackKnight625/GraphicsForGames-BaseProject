@@ -178,5 +178,22 @@ namespace mgl {
             (*ShaderProgram)->unbind();
     }
 
+    void Mesh::draw(glm::mat4 modelMatrix, mgl::TextureInfo* textureInfo) {
+        (*ShaderProgram)->bind();
+        textureInfo->updateShader(*ShaderProgram);
+        glUniformMatrix4fv((*ShaderProgram)->Uniforms[MODEL_MATRIX].index,
+            1, GL_FALSE, glm::value_ptr(modelMatrix));
+
+        glBindVertexArray(VaoId);
+        for (MeshData& mesh : Meshes) {
+            glDrawElementsBaseVertex(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_INT,
+                (void*)(sizeof(unsigned int) * mesh.baseIndex),
+                mesh.baseVertex);
+        }
+        glBindVertexArray(0);
+
+        (*ShaderProgram)->unbind();
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
 } // namespace mgl

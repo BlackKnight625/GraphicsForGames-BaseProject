@@ -22,6 +22,7 @@
 
 #include "mglShader.hpp"
 #include "mglConventions.hpp"
+#include "TextureGenerator.hpp"
 
 namespace mgl {
 
@@ -51,6 +52,7 @@ namespace mgl {
 
         void create(mgl::ShaderProgram **shaderProgram, const std::string& filename);
         void draw(glm::vec4 actualColor, glm::mat4 modelMatrix);
+        void draw(glm::mat4 modelMatrix, mgl::TextureInfo* textureInfo);
 
         bool hasNormals();
         bool hasTexcoords();

@@ -19,7 +19,7 @@ namespace mgl {
     private:
         // Drawing-related attributes
         Mesh* _mesh;
-        Texture2D _texture = Texture2D();
+        TextureInfo* _textureInfo;
 
         // Physics-related attributes
         glm::vec3 _velocity = glm::vec3(0.0f);
@@ -32,10 +32,9 @@ namespace mgl {
         int _collisionPriority = 0;
 
     public:
-        Body(MeshManager* meshManager, ITextureGenerator* textureGenerator) {
+        Body(MeshManager* meshManager, TextureInfo* textureInfo) {
             _mesh = meshManager->getSphereMesh();
-
-            _texture.load(textureGenerator);
+            _textureInfo = textureInfo;
         }
 
         void draw() override;
@@ -59,7 +58,7 @@ namespace mgl {
 
     class Planet : public Body {
     public:
-        Planet(MeshManager* meshManager, ITextureGenerator* textureGenerator) : Body(meshManager, textureGenerator) {
+        Planet(MeshManager* meshManager, TextureInfo* textureInfo) : Body(meshManager, textureInfo) {
             _collisionPriority = 1;
         }
 
@@ -67,7 +66,7 @@ namespace mgl {
     };
 
     class Meteor : public Body {
-        Meteor(MeshManager* meshManager, ITextureGenerator* textureGenerator) : Body(meshManager, textureGenerator) {
+        Meteor(MeshManager* meshManager, TextureInfo* textureInfo) : Body(meshManager, textureInfo) {
             _collisionPriority = 0;
         }
 
@@ -75,7 +74,7 @@ namespace mgl {
     };
 
     class Star : public Body {
-        Star(MeshManager* meshManager, ITextureGenerator* textureGenerator) : Body(meshManager, textureGenerator) {
+        Star(MeshManager* meshManager, TextureInfo* textureInfo) : Body(meshManager, textureInfo) {
             _collisionPriority = 2;
         }
 

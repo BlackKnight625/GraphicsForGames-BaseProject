@@ -33,6 +33,10 @@ namespace mgl {
 		virtual void create() = 0;
 		void bind(GLuint unit);
 		void unbind(GLuint unit);
+
+		GLuint getSamplerId() {
+			return _samplerId;
+		}
 	};
 
 	class NearestSampler : public Sampler {
@@ -104,6 +108,7 @@ namespace mgl {
 
 		TextureInfo(GLenum textureunit, GLuint index, const std::string& uniform,
 			Texture* texture, Sampler* sampler);
+		TextureInfo();
 		void updateShader(ShaderProgram* shader);
 	};
 

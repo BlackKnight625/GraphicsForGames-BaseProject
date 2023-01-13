@@ -41,6 +41,16 @@ private:
 
     std::vector<mgl::Body*> _bodies;
 
+    mgl::Sampler* _sampler;
+
+    mgl::Texture2D _planetTexture = mgl::Texture2D();
+    mgl::Texture2D _meteorTexture = mgl::Texture2D();
+    mgl::Texture2D _starTexture = mgl::Texture2D();
+
+    mgl::TextureInfo _planetTextureInfo;
+    mgl::TextureInfo _meteorTextureInfo;
+    mgl::TextureInfo _starTextureInfo;
+
 	void createMeshManager();
 	void createShaderProgram();
 	void createBufferObjects();
@@ -59,6 +69,7 @@ public:
         delete Camera;
         delete MeshManager;
     }
+
 };
 
 ///////////////////////////////////////////////////////////////////////// SHADER
@@ -73,6 +84,7 @@ void MyApp::createShaderProgram() {
   Shaders->addUniform(mgl::MODEL_MATRIX);
   Shaders->addUniformBlock(mgl::CAMERA_BLOCK, mgl::Mesh::UBO_BP);
   Shaders->addUniform(mgl::ACTUAL_COLOR_ATTRIBUTE);
+  Shaders->addUniform(mgl::SAMPLER_ATTRIBUTE);
 
   if (MeshManager->getSphereMesh()->hasNormals()) {
       Shaders->addAttribute(mgl::NORMAL_ATTRIBUTE, mgl::Mesh::NORMAL);
@@ -94,12 +106,29 @@ void MyApp::createMeshManager() {
 void MyApp::createBufferObjects() {
     MeshManager->createBufferObjects();
 	Camera = new mgl::Camera(mgl::Mesh::UBO_BP);
+
+    _sampler = new mgl::LinearAnisotropicSampler();
 }
 
 void MyApp::createEntities() {
-    mgl::UniformTextureGenerator generator1 = mgl::UniformTextureGenerator(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    // Creating the texture generators
 
-    mgl::Planet* planet1 = new mgl::Planet(MeshManager, &generator1);
+    auto planetGenerator = mgl::UniformTextureGenerator(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    auto meteorGenerator = mgl::UniformTextureGenerator(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+    auto starGenerator = mgl::UniformTextureGenerator(glm::vec4(1.0f, 0.5f, 0.0f, 1.0f));
+
+    // Creating the textures
+    _planetTexture.load(&planetGenerator);
+    _meteorTexture.load(&meteorGenerator);
+    _starTexture.load(&starGenerator);
+
+    // Creating the texture infos
+
+    _planetTextureInfo = mgl::TextureInfo(GL_TEXTURE0, _sampler->getSamplerId(), mgl::SAMPLER_ATTRIBUTE, & _planetTexture, _sampler);
+    _meteorTextureInfo = mgl::TextureInfo(GL_TEXTURE1, _sampler->getSamplerId(), mgl::SAMPLER_ATTRIBUTE, &_meteorTexture, _sampler);
+    _starTextureInfo = mgl::TextureInfo(GL_TEXTURE2, _sampler->getSamplerId(), mgl::SAMPLER_ATTRIBUTE, &_starTexture, _sampler);
+
+    mgl::Planet* planet1 = new mgl::Planet(MeshManager, &_planetTextureInfo);
 
     planet1->setMass(10);
 
@@ -113,6 +142,8 @@ void MyApp::destroyBufferObjects() {
     for (mgl::Body* entity : _bodies) {
         delete entity;
     }
+
+    delete _sampler;
 }
 
 ////////////////////////////////////////////////////////////////////////// SCENE

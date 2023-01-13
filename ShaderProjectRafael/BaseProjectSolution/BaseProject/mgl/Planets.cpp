@@ -1,5 +1,7 @@
 ﻿#include "Planets.hpp"
 
+#define RANDOM_FLOAT static_cast <float> (rand() + rand()) / static_cast <float> (RAND_MAX)
+
 float G = 6.673e-11f; // Gravitational constant
 
 namespace mgl {
@@ -29,6 +31,8 @@ namespace mgl {
 	}
 
 	void Body::update(UpdateInfo* info) {
+		return;
+
 		// Calculating the next position
 		_position += _velocity * info->delta;
 
@@ -54,10 +58,14 @@ namespace mgl {
 
 	void Body::draw() {
 		// Drawing this entity
-		std::cout << "Drawing..." << std::endl;
-		_mesh->draw(glm::vec4(1.0f, 0.5f, 0.2f, 1.0f), getModelMatrix());
+		_mesh->draw(getModelMatrix(), _textureInfo);
 	}
 
+	glm::vec3 randomVector() {
+		glm::vec3 vector(RANDOM_FLOAT, RANDOM_FLOAT, RANDOM_FLOAT);
+
+		return glm::normalize(vector);
+	}
 
 	void Planet::onCollision(Body* other, UpdateInfo* info) {
 		
