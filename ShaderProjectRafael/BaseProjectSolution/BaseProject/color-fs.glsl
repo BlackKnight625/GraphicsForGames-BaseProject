@@ -39,14 +39,14 @@ void main(void) {
 		specular = pow(max(dot(R, E), 0.0), 32.0);
 	}
 
-	/*
+	
 	if(isStar > 0) {
 		// It's a star, so it's always bright
 		diffuse = 0.0;
 		ambient = 1.0;
 		specular = 0.0;
 	}
-	*/
+	
 
 	vec3 worldPosition = vec3(ModelMatrix * vec4(exPosition, 1.0));
 	vec3 p = worldPosition * 0.5 + 0.5;
