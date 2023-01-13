@@ -163,6 +163,7 @@
     <ClCompile Include="mgl\mglCamera.cpp" />
     <ClCompile Include="mgl\mglError.cpp" />
     <ClCompile Include="mgl\mglShader.cpp" />
+    <ClCompile Include="mgl\TextureGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mgl\Planets.hpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="mgl\mglConventions.hpp" />
     <ClInclude Include="mgl\mglError.hpp" />
     <ClInclude Include="mgl\mglShader.hpp" />
+    <ClInclude Include="mgl\TextureGenerator.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

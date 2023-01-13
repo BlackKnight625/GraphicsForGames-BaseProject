@@ -12,8 +12,6 @@
 
 #include <iostream>
 
-#include<bits/stdc++.h>
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -76,10 +74,10 @@ void MyApp::createShaderProgram() {
   Shaders->addUniformBlock(mgl::CAMERA_BLOCK, mgl::Mesh::UBO_BP);
   Shaders->addUniform(mgl::ACTUAL_COLOR_ATTRIBUTE);
 
-  if (MeshManager->getTriangleMesh()->hasNormals()) {
+  if (MeshManager->getSphereMesh()->hasNormals()) {
       Shaders->addAttribute(mgl::NORMAL_ATTRIBUTE, mgl::Mesh::NORMAL);
   }
-  if (MeshManager->getTriangleMesh()->hasTexcoords()) {
+  if (MeshManager->getSphereMesh()->hasTexcoords()) {
       Shaders->addAttribute(mgl::TEXCOORD_ATTRIBUTE, mgl::Mesh::TEXCOORD);
   }
 
@@ -89,9 +87,7 @@ void MyApp::createShaderProgram() {
 void MyApp::createMeshManager() {
     MeshManager = new mgl::MeshManager();
 
-    MeshManager->createCrabMesh(&Shaders, "../assets/models/Triangle.obj", 
-"../assets/models/Square.obj", 
-"../assets/models/Parallelogram.obj");
+    MeshManager->createCrabMesh(&Shaders, "../assets/models/Sphere.obj");
 }
 
 
@@ -155,6 +151,31 @@ void MyApp::drawScene(double elapsed) {
 	for (mgl::Body* entity : _bodies) {
 		entity->update(&info);
 	}
+
+    // Detecting collisions
+    for(int i = 0; i < _bodies.size(); i++) {
+	    for(int j = i + 1; j < _bodies.size(); j++) {
+		    // Detecting collision between body at index i and body at index j
+            mgl::Body* body1 = _bodies.at(i);
+            mgl::Body* body2 = _bodies.at(j);
+
+            glm::vec3 body1ToBody2 = body2->getPosition() - body1->getPosition();
+
+            if(glm::length(body1ToBody2) < body1->getRadius() + body2->getRadius()) {
+	            // The sum of radiuses is larger than the distance. Collision detected
+
+                if(body1->getCollisionPriority() > body2->getCollisionPriority()) {
+	                // Letting body1 deal with the collision since it requests so
+                    body1->onCollision(body2, &info);
+                }
+                else {
+                    // body1->getCollisionPriority() <= body2->getCollisionPriority()
+                    // If the priorities are equal, it doesn't matter who deals with the collision
+                    body2->onCollision(body1, &info);
+                }
+            }
+	    }
+    }
 
     // Removing bodies
     auto removeLambda = [infoReference](mgl::Body* element) {

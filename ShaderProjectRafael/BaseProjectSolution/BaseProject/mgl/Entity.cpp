@@ -66,10 +66,6 @@ namespace mgl {
         EntityMesh->draw(ActualColor, getModelMatrix());
     }
 
-    void IEntity::update(float delta) {
-	    // Do nothing by default
-    }
-
     void IEntity::createEntity(MeshManager* meshManager) {
 	    // Do nothing by default
     }

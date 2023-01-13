@@ -38,6 +38,10 @@ namespace mgl {
 		virtual bool isBody();
 
 		virtual ~IEntity() = default;
+
+		glm::vec3 getPosition() {
+			return _position;
+		}
 	};
 
 	// Composition of Entities

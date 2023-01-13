@@ -2,15 +2,11 @@
 
 namespace mgl {
 	void MeshManager::createBufferObjects() {
-		triangleMesh.createBufferObjects();
-		squareMesh.createBufferObjects();
-		parallelogramMesh.createBufferObjects();
+		sphereMesh.createBufferObjects();
 	}
 
 	void MeshManager::destroyBufferObjects() {
-		triangleMesh.destroyBufferObjects();
-		squareMesh.destroyBufferObjects();
-		parallelogramMesh.destroyBufferObjects();
+		sphereMesh.destroyBufferObjects();
 	}
 
 

@@ -2,6 +2,8 @@
 
 namespace mgl {
 	void Crab::createEntity(MeshManager *meshManager) {
+		/*
+
 		// An arm
 		CompositeEntity* arm = new CompositeEntity(this);
 
@@ -45,5 +47,7 @@ namespace mgl {
 		greenParallelogram->scale(glm::vec3(0.75f, 0.75f, 1.0f));
 		greenParallelogram->rotate(-135, glm::vec3(0.0f, 0.0f, 1.0f));
 		greenParallelogram->translate(glm::vec3(2.5f, 2.3f, 0.0f));
+
+		*/
 	}
 }
