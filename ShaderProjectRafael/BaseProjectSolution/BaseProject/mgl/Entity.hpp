@@ -8,6 +8,8 @@
 #include <glm/detail/type_quat.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include "mglCamera.hpp"
+
 namespace mgl {
 	class CompositeEntity;
 	class Entity;
@@ -16,20 +18,22 @@ namespace mgl {
 	class IEntity {
 	protected:
 		glm::vec3 _position = glm::vec3(0.0f);
-		glm::quat _rotationQuaternion = glm::quat(0, glm::vec3(0.0f, 1.0f, 0.0f));
 		glm::vec3 _scale = glm::vec3(1.0f);
+		glm::vec3 _rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+		float _currentAngle = 0;
 	public:
 		CompositeEntity* Parent = nullptr;
 
-		virtual void draw() = 0;
+		virtual void draw(Camera* camera) = 0;
 
 		void translate(glm::vec3 translation);
-		void rotate(float angle, glm::vec3 rotationAxis);
 		void scale(glm::vec3 scale);
 		glm::mat4 getModelMatrix();
 		glm::mat4 getPositionMatrix();
 		glm::mat4 getRotationMatrix();
 		glm::mat4 getScaleMatrix();
+		glm::mat4 getNormalMatrix();
+		glm::quat getQuaternion();
 
 		virtual bool isBody();
 
@@ -60,7 +64,7 @@ namespace mgl {
 			}
 		}
 		
-		void draw() override;
+		void draw(Camera* camera) override;
 		void addChild(IEntity* child);
 	};
 
@@ -84,7 +88,7 @@ namespace mgl {
 
 		~Entity() override = default;
 		
-		void draw() override;
+		void draw(Camera* camera) override;
 	};
 }
 

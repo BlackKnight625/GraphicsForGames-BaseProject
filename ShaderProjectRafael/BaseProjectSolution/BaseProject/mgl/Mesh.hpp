@@ -52,7 +52,8 @@ namespace mgl {
 
         void create(mgl::ShaderProgram **shaderProgram, const std::string& filename);
         void draw(glm::vec4 actualColor, glm::mat4 modelMatrix);
-        void draw(glm::mat4 modelMatrix, mgl::TextureInfo* textureInfo);
+        void draw(glm::mat4 modelMatrix, glm::mat4 normalMatrix, mgl::TextureInfo* textureInfo, bool isStar,
+            glm::vec3 mainColor, glm::vec3 veinColor);
 
         bool hasNormals();
         bool hasTexcoords();

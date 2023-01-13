@@ -81,7 +81,7 @@ namespace mgl {
 	};
 
 	class Texture;
-	class Texture2D;
+	class Texture3D;
 	struct TextureInfo;
 
 	//////////////////////////////////////////////////////////////////////// TEXTURE
@@ -114,7 +114,7 @@ namespace mgl {
 
 	/////////////////////////////////////////////////////////////////////// TEXTURES
 
-	class Texture2D : public Texture {
+	class Texture3D : public Texture {
 	public:
 		void bind() override;
 		void unbind() override;
@@ -125,44 +125,36 @@ namespace mgl {
 
 	class ITextureGenerator {
 	public:
-		virtual void generate(unsigned char* image, int width, int height) = 0;
+		virtual void generate(GLfloat* image, int width, int height, int depth) = 0;
 
 		virtual ~ITextureGenerator() = default;
 
-		static inline void setRGBA(unsigned char* image, int pixelIndex, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
-		static inline void setRGBA(unsigned char* image, int pixelIndex, glm::vec4 rgba);
+		static inline void setRGBA(GLfloat* image, int pixelIndex, float red);
 	};
 
 	class UniformTextureGenerator : public ITextureGenerator {
 	private:
-		glm::vec4 _color;
+		float _red;
 	public:
 
-		UniformTextureGenerator(glm::vec4 color) : ITextureGenerator() {
-			_color = color;
+		UniformTextureGenerator(float red) : ITextureGenerator() {
+			_red = red;
 		}
 
-		void generate(unsigned char* image, int width, int height) override;
+		void generate(GLfloat* image, int width, int height, int depth) override;
 
 		~UniformTextureGenerator() override = default;
 	};
 
-	class PerlinNoiseTextureGenerator : public ITextureGenerator {
-	private:
-		glm::vec4 _color1;
-		glm::vec4 _color2;
-		int _gridSize;
+	class RandomTextureGenerator : public ITextureGenerator {
 	public:
 
-		PerlinNoiseTextureGenerator(glm::vec4 color1, glm::vec4 color2, int gridSize) {
-			_color1 = color1;
-			_color2 = color2;
-			_gridSize = gridSize;
+		RandomTextureGenerator() {
 		}
 
-		void generate(unsigned char* image, int width, int height) override;
+		void generate(GLfloat* image, int width, int height, int depth) override;
 
-		~PerlinNoiseTextureGenerator() override = default;
+		~RandomTextureGenerator() override = default;
 	};
 } // namespace 
 

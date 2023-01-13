@@ -178,12 +178,19 @@ namespace mgl {
             (*ShaderProgram)->unbind();
     }
 
-    void Mesh::draw(glm::mat4 modelMatrix, mgl::TextureInfo* textureInfo) {
+    void Mesh::draw(glm::mat4 modelMatrix, glm::mat4 normalMatrix, mgl::TextureInfo* textureInfo, bool isStar,
+        glm::vec3 mainColor, glm::vec3 veinColor) {
         (*ShaderProgram)->bind();
         textureInfo->updateShader(*ShaderProgram);
         glUniformMatrix4fv((*ShaderProgram)->Uniforms[MODEL_MATRIX].index,
             1, GL_FALSE, glm::value_ptr(modelMatrix));
-
+        glUniformMatrix4fv((*ShaderProgram)->Uniforms[NORMAL_MATRIX].index,
+            1, GL_FALSE, glm::value_ptr(normalMatrix));
+        glUniform1i((*ShaderProgram)->Uniforms[IS_STAR_ATTRIBUTE].index, isStar);
+        glUniform3f((*ShaderProgram)->Uniforms[MAIN_COLOR_ATTRIBUTE].index,
+            mainColor[0], mainColor[1], mainColor[2]);
+        glUniform3f((*ShaderProgram)->Uniforms[VEIN_COLOR_ATTRIBUTE].index,
+            veinColor[0], veinColor[1], veinColor[2]);
         glBindVertexArray(VaoId);
         for (MeshData& mesh : Meshes) {
             glDrawElementsBaseVertex(GL_TRIANGLES, mesh.nIndices, GL_UNSIGNED_INT,

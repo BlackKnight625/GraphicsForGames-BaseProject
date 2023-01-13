@@ -4,6 +4,11 @@
 
 namespace mgl {
 
+    inline float getRandomFloat() {
+        return ((float)(rand()) / ((float)(RAND_MAX)));
+    }
+
+
     ////////////////////////////////////////////////////////////////////////////////
 
     Sampler::Sampler() {
@@ -104,92 +109,79 @@ namespace mgl {
 
     Texture::~Texture() {}
 
-    ////////////////////////////////////////////////////////////////////// Texture2D
+    ////////////////////////////////////////////////////////////////////// Texture3D
 
-    void Texture2D::bind() { glBindTexture(GL_TEXTURE_2D, id); }
+    void Texture3D::bind() { glBindTexture(GL_TEXTURE_3D, id); }
 
-    void Texture2D::unbind() { glBindTexture(GL_TEXTURE_2D, 0); }
+    void Texture3D::unbind() { glBindTexture(GL_TEXTURE_3D, 0); }
 
-    void Texture2D::load(ITextureGenerator* textureGenerator) {
-        const int width = 1024;
-        const int height = 1024;
+    void Texture3D::load(ITextureGenerator* textureGenerator) {
+        const int width = 128;
+        const int height = 128;
+        const int depth = 128;
 
-        unsigned char* image = new unsigned char[width * height * 4];
+		GLfloat* image = new GLfloat[width * height * depth];
 
-        textureGenerator->generate(image, width, height);
+        textureGenerator->generate(image, width, height, depth);
 
         glGenTextures(1, &id);
-        glBindTexture(GL_TEXTURE_2D, id);
+        glBindTexture(GL_TEXTURE_3D, id);
 
         // Pré OpenGL v3.30 (still compatible with core)
 
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_REPEAT);
 
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER,
         //                GL_LINEAR_MIPMAP_LINEAR);
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-            GL_UNSIGNED_BYTE, image);
-        // syntax: glTexImage2D(target, level, internalformat, width, height, border,
+        // glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        
+        glTexImage3D(GL_TEXTURE_3D, 0, GL_RED, width, height, depth, 0, GL_RED,
+            GL_FLOAT, image);
+        // syntax: glTexImage3D(target, level, internalformat, width, height, border,
         // format, type, data)
 
-        glGenerateMipmap(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        glGenerateMipmap(GL_TEXTURE_3D);
+        glBindTexture(GL_TEXTURE_3D, 0);
 
         delete image;
     }
 
-    inline void ITextureGenerator::setRGBA(unsigned char* image, int pixelIndex, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {
-        int index = pixelIndex * 4;
-
-        image[index] = red;
-        image[index + 1] = green;
-        image[index + 2] = blue;
-        image[index + 3] = alpha;
+    inline void ITextureGenerator::setRGBA(GLfloat* image, int pixelIndex, float red) {
+        image[pixelIndex] = red;
     }
 
-    inline void ITextureGenerator::setRGBA(unsigned char* image, int pixelIndex, glm::vec4 rgba) {
-        setRGBA(image, pixelIndex, 
-            ((unsigned char)rgba[0] * 255), 
-            ((unsigned char)rgba[1] * 255), 
-            ((unsigned char)rgba[2] * 255), 
-            ((unsigned char)rgba[3] * 255));
-    }
-
-    void UniformTextureGenerator::generate(unsigned char* image, int width, int height) {
-        int pixels = width * height;
+    void UniformTextureGenerator::generate(GLfloat* image, int width, int height, int depth) {
+        int pixels = width * height * depth;
 
         for(int i = 0; i < pixels; i++) {
-            setRGBA(image, i, _color);
+            setRGBA(image, i, _red);
         }
     }
 
 
-    void PerlinNoiseTextureGenerator::generate(unsigned char* image, int width, int height) {
-        // Assuming _gridSize is a divisor of width and height
+    void RandomTextureGenerator::generate(GLfloat* image, int width, int height, int depth) {
+        int pixels = width * height * depth;
 
-	    for(int x = 0; x < width; x++) {
-		    for(int y = 0; y < height; y++) {
-			    
-		    }
-	    }
+        for (int i = 0; i < pixels; i++) {
+			setRGBA(image, i, getRandomFloat() * 2.0f - 1.0f);
+        }
     }
 
 } // namespace mgl

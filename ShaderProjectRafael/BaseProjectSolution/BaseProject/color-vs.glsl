@@ -1,23 +1,25 @@
 #version 330 core
 
 in vec3 inPosition;
-out vec4 exColor;
 in vec3 inNormal;
+in vec2 inTexcoord;
 
 uniform mat4 ModelMatrix;
 uniform vec4 actualColor;
-uniform sampler2D sampler;
 
 uniform Camera {
    mat4 ViewMatrix;
    mat4 ProjectionMatrix;
 };
 
+out vec3 exPosition;
+out vec3 exNormal;
+out vec2 exTexcoord;
+
 void main(void) {
-	vec4 position = vec4(inPosition[0], inPosition[1], inPosition[2], 1.0f);
-  gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * position;
+	exPosition = inPosition;
+	exNormal = inNormal;
+	exTexcoord = inTexcoord;
 
-  float dotProduct = dot(vec3(0.1f, 0.2f, 1.0f), inNormal);
-
-  exColor = actualColor + (dotProduct * 0.05f);
+	gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(inPosition, 1.0);
 }
