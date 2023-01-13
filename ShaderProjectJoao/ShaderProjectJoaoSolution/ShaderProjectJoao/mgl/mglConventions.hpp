@@ -29,6 +29,7 @@ const std::string TANGENT_ATTRIBUTE = "inTangent";
 const std::string BITANGENT_ATTRIBUTE = "inBitangent";
 const std::string COLOR_ATTRIBUTE = "inColor";
 const std::string ACTUAL_COLOR_ATTRIBUTE = "actualColor";
+const std::string SAMPLER_ATTRIBUTE = "sampler";
 
 ////////////////////////////////////////////////////////////////////////////////
 } // namespace mgl
