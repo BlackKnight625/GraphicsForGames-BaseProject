@@ -176,8 +176,6 @@
   <ItemGroup>
     <None Include="color-fs.glsl" />
     <None Include="color-vs.glsl" />
-    <None Include="marblewithphong-fs.glsl" />
-    <None Include="marblewithphong-vs.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
