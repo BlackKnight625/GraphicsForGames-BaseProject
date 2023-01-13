@@ -2,8 +2,6 @@
 
 #include <cassert>
 
-#include "stb_image.h"
-
 namespace mgl {
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -107,13 +105,13 @@ namespace mgl {
 
     void Texture2D::unbind() { glBindTexture(GL_TEXTURE_2D, 0); }
 
-    void Texture2D::load(ITextureGenerator& textureGenerator) {
-        int width = 1024;
-        int height = 1024;
+    void Texture2D::load(ITextureGenerator* textureGenerator) {
+        const int width = 1024;
+        const int height = 1024;
 
         unsigned char image[width * height * 4];
 
-        textureGenerator.generate(image, width, height);
+        textureGenerator->generate(image, width, height);
 
         glGenTextures(1, &id);
         glBindTexture(GL_TEXTURE_2D, id);

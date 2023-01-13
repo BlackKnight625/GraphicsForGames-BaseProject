@@ -40,9 +40,6 @@
     <ClCompile Include="mgl\Mesh.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="mgl\Crab.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="mgl\Entity.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
@@ -76,9 +73,6 @@
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="mgl\Mesh.hpp">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
-    <ClInclude Include="mgl\Crab.hpp">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="mgl\Entity.hpp">

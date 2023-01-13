@@ -113,7 +113,7 @@ namespace mgl {
 	public:
 		void bind() override;
 		void unbind() override;
-		void load(ITextureGenerator& textureGenerator);
+		void load(ITextureGenerator* textureGenerator);
 	};
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -128,12 +128,12 @@ namespace mgl {
 		static inline void setRGBA(unsigned char* image, int pixelIndex, glm::vec4 rgba);
 	};
 
-	class UniformTextureGenerator : ITextureGenerator {
+	class UniformTextureGenerator : public ITextureGenerator {
 	private:
 		glm::vec4 _color;
 	public:
 
-		UniformTextureGenerator(glm::vec4 color) {
+		UniformTextureGenerator(glm::vec4 color) : ITextureGenerator() {
 			_color = color;
 		}
 
@@ -142,7 +142,7 @@ namespace mgl {
 		~UniformTextureGenerator() override = default;
 	};
 
-	class PerlinNoiseTextureGenerator : ITextureGenerator {
+	class PerlinNoiseTextureGenerator : public ITextureGenerator {
 	private:
 		glm::vec4 _color1;
 		glm::vec4 _color2;

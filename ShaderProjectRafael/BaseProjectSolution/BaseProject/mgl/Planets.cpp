@@ -1,6 +1,6 @@
 ﻿#include "Planets.hpp"
 
-float G = 6.673e-11; // Gravitational constant
+float G = 6.673e-11f; // Gravitational constant
 
 namespace mgl {
 
@@ -38,7 +38,7 @@ namespace mgl {
 		// Calculating the acceleration that this body is under, given the mass and locations of all other bodies
 		glm::vec3 acceleration = glm::vec3(0.0f);
 
-		for(Body* body : info->bodies) {
+		for(Body* body : *info->bodies) {
 			if(body != this) {
 				glm::vec3 toBody = body->_position - _position;
 
@@ -50,19 +50,27 @@ namespace mgl {
 
 		// Updating this body's velocity
 		_velocity += acceleration * info->delta;
-
-		// Checking for collisions
-		for (Body* body : info->bodies) {
-			if(body != this) {
-				
-			}
-		}
 	}
 
 	void Body::draw() {
 		// Drawing this entity
+		std::cout << "Drawing..." << std::endl;
 		_mesh->draw(glm::vec4(1.0f), getModelMatrix());
 	}
+
+
+	void Planet::onCollision(Body* other, UpdateInfo* info) {
+		
+	}
+
+	void Meteor::onCollision(Body* other, UpdateInfo* info) {
+		
+	}
+
+	void Star::onCollision(Body* other, UpdateInfo* info) {
+		
+	}
+
 
 
 }

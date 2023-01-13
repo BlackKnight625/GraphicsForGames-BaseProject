@@ -22,11 +22,11 @@
 #include "mgl/mgl.hpp"
 #include "mgl/MeshManager.hpp"
 #include "mgl/Mesh.hpp"
-#include "mgl/Crab.hpp"
 
 #include <chrono>
 
 #include "mgl/Planets.hpp"
+#include "mgl/TextureGenerator.hpp"
 
 ////////////////////////////////////////////////////////////////////////// MYAPP
 
@@ -97,11 +97,13 @@ void MyApp::createBufferObjects() {
 }
 
 void MyApp::createEntities() {
+    mgl::UniformTextureGenerator generator1 = mgl::UniformTextureGenerator(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
+    mgl::Planet* planet1 = new mgl::Planet(MeshManager, &generator1);
 
-    for(mgl::Body* entity : _bodies) {
-        entity->createEntity(MeshManager);
-    }
+    planet1->setMass(10);
+
+    _bodies.push_back(planet1);
 }
 
 

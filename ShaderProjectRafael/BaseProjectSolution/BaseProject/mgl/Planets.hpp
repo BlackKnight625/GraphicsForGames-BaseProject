@@ -2,6 +2,7 @@
 #define MGL_PLANETS_HPP
 
 #include "Entity.hpp"
+#include "MeshManager.hpp"
 #include "TextureGenerator.hpp"
 
 namespace mgl {
@@ -14,31 +15,30 @@ namespace mgl {
         std::vector<mgl::Body*> toAdd;
     };
 
-    class Body : IEntity {
+    class Body : public IEntity {
     private:
         // Drawing-related attributes
         Mesh* _mesh;
-        Texture2D _texture;
+        Texture2D _texture = Texture2D();
 
         // Physics-related attributes
         glm::vec3 _velocity = glm::vec3(0.0f);
         glm::vec3 _rotationAxis = glm::vec3(0.0f, 1.0f, 0.0f);
         float _angleSpeed = 0;
-        float _mass;
-        float _radius;
+        float _mass = 0;
+        float _radius = 1;
 
     protected:
         int _collisionPriority = 0;
 
     public:
-        Body(Mesh* mesh, ITextureGenerator& textureGenerator) {
-            _mesh = mesh;
+        Body(MeshManager* meshManager, ITextureGenerator* textureGenerator) {
+            _mesh = meshManager->getSphereMesh();
 
             _texture.load(textureGenerator);
         }
 
         void draw() override;
-        using IEntity::createEntity;
 
         bool isBody() override;
         void update(UpdateInfo* info);
@@ -57,23 +57,29 @@ namespace mgl {
         }
     };
 
-    class Planet : Body {
+    class Planet : public Body {
     public:
-        Planet(Mesh* mesh, ITextureGenerator& textureGenerator) : Body(mesh, textureGenerator) {
+        Planet(MeshManager* meshManager, ITextureGenerator* textureGenerator) : Body(meshManager, textureGenerator) {
             _collisionPriority = 1;
         }
+
+        void onCollision(Body* other, UpdateInfo* info) override;
     };
 
-    class Meteor : Body {
-        Meteor(Mesh* mesh, ITextureGenerator& textureGenerator) : Body(mesh, textureGenerator) {
+    class Meteor : public Body {
+        Meteor(MeshManager* meshManager, ITextureGenerator* textureGenerator) : Body(meshManager, textureGenerator) {
             _collisionPriority = 0;
         }
+
+        void onCollision(Body* other, UpdateInfo* info) override;
     };
 
-    class Star : Body {
-        Star(Mesh* mesh, ITextureGenerator& textureGenerator) : Body(mesh, textureGenerator) {
+    class Star : public Body {
+        Star(MeshManager* meshManager, ITextureGenerator* textureGenerator) : Body(meshManager, textureGenerator) {
             _collisionPriority = 2;
         }
+
+        void onCollision(Body* other, UpdateInfo* info) override;
     };
 
     

@@ -2,14 +2,11 @@
 #define MGL_ENTITY_HPP
 
 #include "Mesh.hpp"
-#include "MeshManager.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <vector>
 #include <glm/detail/type_quat.hpp>
 #include <glm/gtx/quaternion.hpp>
-
-#include "Planets.hpp"
 
 namespace mgl {
 	class CompositeEntity;
@@ -25,7 +22,6 @@ namespace mgl {
 		CompositeEntity* Parent = nullptr;
 
 		virtual void draw() = 0;
-		virtual void createEntity(MeshManager* meshManager);
 
 		void translate(glm::vec3 translation);
 		void rotate(float angle, glm::vec3 rotationAxis);
